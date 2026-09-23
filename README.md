@@ -128,6 +128,18 @@ facts it cannot publish.
 
 `scripts/health.sh [host]` asks a running node.
 
+## Deploy
+
+What an operator does, in order:
+
+1. Set `MCL_REALM` (the 64-hex tag) **and** `MCL_REALM_NAME` (`io.macula`); the
+   warden refuses to start unless sha256 of the name is the tag.
+2. Mount the host's log directory read-only and a **named** volume at
+   `/etc/mcl/secrets` (both are in `deploy/docker-compose.yml`).
+3. Start it and read `[warden] node id: <64 hex>` from the log. Add that id to
+   mcl-sentinel's `MCL_SENTINEL_WARDENS`, or the sentinel ignores this warden.
+4. Leave `MCL_WARDEN_TARPIT_PORTS=[]` unless decoy ports are open in the firewall.
+
 ## Build and test
 
     rebar3 eunit
