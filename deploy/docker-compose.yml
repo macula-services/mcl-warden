@@ -35,7 +35,7 @@ services:
       # ⚠ NAMED, SO IT OUTLIVES THE CONTAINER. The node identity key is the
       # warden's verified identity on the mesh; every recreate without this
       # mints a new one, and consumers that know the warden stop knowing it.
-      - mcl-warden-identity:/etc/mcl/secrets
+      - secrets:/etc/mcl/secrets
     labels:
       # Only meaningful if you run watchtower: it pulls a new :latest and
       # recreates the container. Harmless otherwise.
@@ -75,5 +75,9 @@ services:
       # and open them in the firewall. Never the real sshd port.
       - MCL_WARDEN_TARPIT_PORTS=${MCL_WARDEN_TARPIT_PORTS:-[]}
 
+# The identity volume, NAMED HERE rather than left to the project name, so a
+# `docker compose -p` with a different name reuses the same key instead of
+# quietly starting a second identity. Deleting it retires the node id.
 volumes:
-  mcl-warden-identity:
+  secrets:
+    name: mcl-warden-secrets
