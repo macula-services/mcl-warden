@@ -25,6 +25,17 @@ services:
     # connects and then sits there with no healthy links, looking fine. If you
     # do want a bridge, give it IPv6 explicitly.
     network_mode: host
+    volumes:
+      # The host's log DIRECTORY, read-only. Not the file: a file bind-mount
+      # pins the inode, so after the first logrotate the path inside the
+      # container still names the old file and the sensor goes blind while
+      # the container looks healthy. RHEL family: the file is /var/log/secure,
+      # so also set MCL_WARDEN_AUTH_LOG=/host/log/secure.
+      - ${MCL_WARDEN_LOG_DIR:-/var/log}:/host/log:ro
+      # ⚠ NAMED, SO IT OUTLIVES THE CONTAINER. The node identity key is the
+      # warden's verified identity on the mesh; every recreate without this
+      # mints a new one, and consumers that know the warden stop knowing it.
+      - mcl-warden-identity:/etc/mcl/secrets
     labels:
       # Only meaningful if you run watchtower: it pulls a new :latest and
       # recreates the container. Harmless otherwise.
@@ -33,6 +44,9 @@ services:
       # No default. A service that guesses its realm announces itself where
       # nobody can attribute it, and that looks exactly like a healthy node.
       - MCL_REALM=${MCL_REALM:?set MCL_REALM to the 64-hex realm tag}
+      # The same realm by NAME, which the fact topics carry. The service
+      # refuses to start unless sha256 of this is MCL_REALM.
+      - MCL_REALM_NAME=${MCL_REALM_NAME:?set MCL_REALM_NAME to the realm name, e.g. io.macula}
       # The TRUST ANCHOR, and a different thing from MCL_REALM above: that is
       # an identifier, this is the realm's public signing key, hex encoded.
       # Without it nothing org-namespaced resolves, the boot claim never
@@ -51,3 +65,15 @@ services:
       - MCL_COOKIE=mcl_warden
       # Host networking means a port already bound on this host fails SILENTLY.
       - MCL_HEALTH_PORT=8460
+      # WHO runs this warden and WHERE. Shown on every fact; unset is fine.
+      - MCL_WARDEN_TENANT_ID=${MCL_WARDEN_TENANT_ID:-}
+      - MCL_WARDEN_LABEL=${MCL_WARDEN_LABEL:-}
+      # Optional map marker, integer micro-degrees (Helsinki: 60170000 / 24940000).
+      - MCL_WARDEN_LAT_E6=${MCL_WARDEN_LAT_E6:-}
+      - MCL_WARDEN_LNG_E6=${MCL_WARDEN_LNG_E6:-}
+      # [] opens nothing. List decoy ports to turn the tarpit on, e.g. [2222,2323],
+      # and open them in the firewall. Never the real sshd port.
+      - MCL_WARDEN_TARPIT_PORTS=${MCL_WARDEN_TARPIT_PORTS:-[]}
+
+volumes:
+  mcl-warden-identity:

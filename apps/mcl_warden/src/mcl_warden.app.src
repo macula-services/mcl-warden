@@ -1,7 +1,7 @@
 {application, mcl_warden, [
     {description, "Deceptive threshold guard: senses intrusion attempts on a public box and reports them to the threat commons"},
     {vsn, "0.1.0"},
-    {registered, [mcl_warden_sup]},
+    {registered, [mcl_warden_sup, sense_auth_log, tarpit_listener, check_in_warden]},
     {mod, {mcl_warden_app, []}},
     {applications, [
         kernel,
@@ -10,7 +10,18 @@
         %% Mesh SDK, realm identity, capabilities, health.
         mcl_om
     ]},
-    {env, []},
+    {env, [
+        %% Decoy ports the tarpit binds. EMPTY BY DEFAULT: a warden dropped in
+        %% without configuration opens no port at all.
+        {tarpit_ports, []},
+        %% Cap on concurrently held connections, so a flood cannot exhaust fds.
+        {tarpit_max_conns, 4096},
+        %% The auth log the sensor tails, inside the container.
+        {auth_log, "/host/log/auth.log"},
+        %% How long a sensor that has been reading may go quiet before health
+        %% reports it degraded.
+        {auth_log_silence_ms, 3600000}
+    ]},
     {modules, []},
     {licenses, ["Apache-2.0"]},
     {links, [{"GitHub", "https://github.com/macula-services/mcl-warden"}]}

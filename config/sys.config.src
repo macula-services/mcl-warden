@@ -3,6 +3,29 @@
 %% half-configured realm announces itself where nobody can attribute it, which
 %% looks exactly like a healthy node.
 [
+    {mcl_warden, [
+        %% The realm NAME the topics carry (io.macula), where MCL_REALM below is
+        %% its sha256 tag. The service refuses to start unless they agree: a
+        %% topic naming one realm published in another reaches nobody.
+        {realm_name,       "${MCL_REALM_NAME}"},
+        %% WHO operates this warden, and WHERE it runs. Display attribution on
+        %% every fact, self-asserted; empty means unset and the key is omitted.
+        %% The verified sender is the node identity, not these.
+        {tenant_id,        "${MCL_WARDEN_TENANT_ID}"},
+        {label,            "${MCL_WARDEN_LABEL}"},
+        %% Declared coordinates, integer micro-degrees ("60170000"), carried on
+        %% the check-in. Self-asserted. Empty means no map marker.
+        {lat_e6,           "${MCL_WARDEN_LAT_E6}"},
+        {lng_e6,           "${MCL_WARDEN_LNG_E6}"},
+        %% Decoy ports as an Erlang list literal, e.g. [2222,2323]. [] is
+        %% sensing-only and opens nothing. Never the real sshd port.
+        {tarpit_ports,     ${MCL_WARDEN_TARPIT_PORTS}},
+        {tarpit_max_conns, ${MCL_WARDEN_MAX_CONNS}},
+        %% The host's auth log inside the container. Mount the DIRECTORY, not
+        %% the file: a file bind-mount pins the inode and the sensor goes blind
+        %% at the first logrotate.
+        {auth_log,         "${MCL_WARDEN_AUTH_LOG}"}
+    ]},
     {mcl_om, [
         %% Without this, mcl_om_identity:load_node_key/0 returns `undefined'
         %% forever and identity_key/0 stays {error, no_identity_key} -- a
@@ -12,9 +35,20 @@
         %% mcl_om_capabilities's own moduledoc). Confirmed live 2026-08-31
         %% on a service generated from an earlier copy of this template that
         %% lacked this line. Point it at the mounted secrets volume.
+        %% ⚠ ON A PERSISTENT VOLUME. This key IS the warden's identity on the
+        %% mesh: every fact is delivered with it as the verified publisher, and
+        %% a consumer attributes and allowlists wardens by it. A container
+        %% recreate without the volume mints a new one, and the warden becomes
+        %% a stranger to everyone who knew it.
         {identity_key_path, "/etc/mcl/secrets/identity.key"},
         {health_port,       ${MCL_HEALTH_PORT}},
         {capability_topic,  <<"_mesh.cap.">>},
+        %% One org per service, named after the repo, and the same org the
+        %% fact topics are owned by. Fixed, not deploy config.
+        {org,               <<"mcl-warden">>},
+        %% Informational labels on the realm's provider row (never trusted).
+        {service_name,      <<"mcl-warden">>},
+        {box,               <<"${MCL_WARDEN_LABEL}">>},
         %% THE REALM IS AN APPLICATION ENV, NOT A SHELL VARIABLE, and this file
         %% is the only place the two meet. mcl_om_identity:realm() reads
         %% application:get_env(mcl_om, realm); exporting MCL_REALM in the

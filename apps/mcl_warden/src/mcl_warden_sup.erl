@@ -1,9 +1,5 @@
-%% @doc Supervises this service's own processes.
-%%
-%% NO CHILDREN AS GENERATED, and an empty child list is the honest scaffold
-%% rather than a placeholder. There is nothing to supervise yet, and a worker
-%% that ticks and does nothing is how a codebase ends up carrying an empty
-%% heartbeat for a year.
+%% @doc Supervises the warden's three surfaces. Each owns its own work and
+%% publishes its own fact; there is no central manager.
 -module(mcl_warden_sup).
 
 -behaviour(supervisor).
@@ -13,4 +9,19 @@
 start_link() -> supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 init([]) ->
-    {ok, {#{strategy => one_for_one, intensity => 5, period => 10}, []}}.
+    {ok, {#{strategy => one_for_one, intensity => 5, period => 10},
+          [%% Tails the host auth log; reports attacker_sighted.
+           worker(sense_auth_log),
+           %% Holds connections on decoy ports, if any are configured;
+           %% reports attacker_ensnared.
+           worker(tarpit_listener),
+           %% The heartbeat; reports warden_checked_in.
+           worker(check_in_warden)]}}.
+
+worker(Module) ->
+    #{id => Module,
+      start => {Module, start_link, []},
+      restart => permanent,
+      shutdown => 5000,
+      type => worker,
+      modules => [Module]}.

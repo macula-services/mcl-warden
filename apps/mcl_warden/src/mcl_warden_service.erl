@@ -1,16 +1,13 @@
-%% @doc The mcl_om service contract: what this service is and may do.
+%% @doc The mcl_om service contract for the warden.
 %%
-%% SIX CALLBACKS, ALL REQUIRED. mcl_om resolves them BY NAME at startup, on a
-%% live node, so a service that forgets one dies with `undef' where nobody is
-%% watching. The `-behaviour' attribute below is what turns that into a compile
-%% error instead, and the generated test suite guards the attribute itself.
+%% A deceptive threshold guard for a public box. It reads the host's auth log
+%% for real attacks on the real sshd, optionally holds attackers in a tarpit on
+%% decoy ports, and publishes what it sees as the three facts in
+%% `mcl_warden_facts'. It never blocks, never stores the log, and holds no
+%% event store: popped, an attacker gains a threat reporter for one box.
 %%
-%% IT ANNOUNCES NOTHING AND ASKS FOR NOTHING, on purpose. A service that does
-%% nothing yet has no capability to offer and needs no authority from the realm.
-%% Advertising a capability before it exists puts a lie on the mesh that another
-%% service can find and call. Both lists grow when the thing they name exists,
-%% and a generated test fails when they change, so growing them is a deliberate
-%% act rather than a comment someone forgot.
+%% SIX CALLBACKS, ALL REQUIRED. mcl_om resolves them BY NAME at startup, so the
+%% `-behaviour' attribute below turns a missing one into a compile error.
 -module(mcl_warden_service).
 
 -behaviour(mcl_om_service).
@@ -22,26 +19,52 @@ info() ->
       version => <<"0.1.0">>,
       description => <<"Deceptive threshold guard: senses intrusion attempts on a public box and reports them to the threat commons">>}.
 
-start(_Opts) -> mcl_warden_sup:start_link().
+%% The realm name the topics carry is checked against the realm the pool
+%% publishes in before anything starts: a mismatch publishes where nobody
+%% subscribed, and looks exactly like a quiet box.
+start(_Opts) ->
+    ok = mcl_warden_facts:check_realm_name(),
+    mcl_warden_sup:start_link().
 
 stop(_State) -> ok.
 
-%% Green once the supervision tree is up. Replace this with a real probe of
-%% whatever this service needs in order to do its job. A dark mesh is usually NOT
-%% a health failure: decide that deliberately rather than by default.
-health() -> ok.
+%% Health is the SENSOR's health, asserted rather than assumed. A dark mesh is
+%% deliberately NOT a health failure: the warden keeps sensing and drops the
+%% facts it cannot publish.
+health() ->
+    sensing(sensor_status()).
 
-%% WHAT THIS SERVICE ANNOUNCES IT CAN DO. Other services find this one by these
-%% names, so each entry is a promise that something answers.
+sensor_status() ->
+    try sense_auth_log:status()
+    catch _:_ -> unavailable
+    end.
+
+%% Not attached to anything: the path is missing or unreadable. Usually the
+%% mount. Nothing this warden reports can be trusted, so do not say ok.
+sensing(#{attached := false, path := Path}) ->
+    {down, {auth_log_unreadable, Path}};
+%% Attached, has read before, and has now been quiet far longer than any real
+%% gap on a public box. This is the blind-but-alive state.
+sensing(#{silent_ms := Silent}) when is_integer(Silent) ->
+    quiet(Silent >= silence_limit_ms(), Silent);
+%% Attached but has never read a byte since boot. Deliberately FAILS OPEN: a
+%% warden freshly started on a genuinely quiet box must not cry broken.
+sensing(#{}) ->
+    ok;
+%% The sensor did not answer at all (dead, or wedged past the call timeout).
+sensing(_Unavailable) ->
+    {down, sensor_unavailable}.
+
+quiet(true, Silent)   -> {degraded, {auth_log_silent_ms, Silent}};
+quiet(false, _Silent) -> ok.
+
+silence_limit_ms() ->
+    application:get_env(mcl_warden, auth_log_silence_ms, 3600000).
+
+%% Nothing callable. The warden's whole output is its three published facts.
 capabilities() -> [].
 
 %% THE AUTHORITY THIS SERVICE ASKS THE REALM FOR, and deliberately nothing more.
-%% Ask for exactly the topics you publish and subscribe to. Popped, an attacker
-%% gains precisely this and no more, which is the whole point of listing it.
-%%
-%% The scope is claimed now because it is the namespace every later resource
-%% hangs under, and a scope costs nothing while a rename costs every deployed
-%% peer.
 identity_spec() ->
     #{scope => <<"mcl-warden">>,
       actions => [],

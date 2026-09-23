@@ -76,6 +76,20 @@ ENV MCL_NODE_HOST=127.0.0.1
 ENV MCL_COOKIE=mcl_warden
 ENV MCL_HEALTH_PORT=8460
 
+# Every ${VAR} in sys.config must resolve or the term is malformed, so the
+# optional ones default to empty, which the service reads as "unset".
+ENV MCL_WARDEN_TENANT_ID=""
+ENV MCL_WARDEN_LABEL=""
+ENV MCL_WARDEN_LAT_E6=""
+ENV MCL_WARDEN_LNG_E6=""
+# Sensing-only by default: no decoy port is bound until an operator lists one.
+ENV MCL_WARDEN_TARPIT_PORTS="[]"
+ENV MCL_WARDEN_MAX_CONNS=65536
+# The host's log DIRECTORY is mounted at /host/log, read-only.
+ENV MCL_WARDEN_AUTH_LOG=/host/log/auth.log
+
+# The node identity key. Mount a NAMED volume here (deploy/docker-compose.yml
+# does): the key is the warden's verified identity on the mesh.
 VOLUME ["/etc/mcl/secrets"]
 
 EXPOSE 8460
