@@ -90,6 +90,15 @@ supervisor_starts_its_three_surfaces_test() ->
     exit(Pid, shutdown),
     wait_down(Pid).
 
+%% An operator lists this warden in mcl-sentinel's MCL_SENTINEL_WARDENS by its
+%% node id, and the log line at start is where they read it. It must be the id
+%% a subscriber sees as the verified publisher: upper-case hex of the node id.
+node_id_is_the_publisher_id_a_sentinel_lists_test() ->
+    {ok, Key} = macula_node_keys:generate(identity, pq_hybrid, #{puzzle_difficulty => 0}),
+    {ok, NodeId} = macula_node_keys:node_id(Key),
+    ?assertEqual(binary:encode_hex(NodeId), ?SERVICE:node_id_hex({ok, Key})),
+    ?assertEqual(<<"none">>, ?SERVICE:node_id_hex({error, no_identity_key})).
+
 %% A warden with no realm publishes into nothing, and one whose realm name is
 %% not the realm it is in publishes where nobody listens. Both refuse to start.
 start_refuses_without_a_realm_test() ->

@@ -106,6 +106,13 @@ None. There is no admission step: a warden links on the PQ profile and the
 identity puzzle, and invite-only is not enforced. A publish is refused only when
 its realm does not match.
 
+### Node id
+
+At start the warden logs `[warden] node id: <64 hex>`. That is the id every
+consumer sees as this warden's verified publisher, and the one to list in
+mcl-sentinel's `MCL_SENTINEL_WARDENS`. It is stable as long as the identity
+volume is.
+
 ## Health
 
 `/health` reports the **sensor**, because a warden that is alive but blind looks

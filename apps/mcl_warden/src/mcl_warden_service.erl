@@ -13,6 +13,7 @@
 -behaviour(mcl_om_service).
 
 -export([info/0, start/1, stop/1, health/0, capabilities/0, identity_spec/0]).
+-export([node_id_hex/1]).
 
 info() ->
     #{name => <<"mcl-warden">>,
@@ -22,9 +23,22 @@ info() ->
 %% The realm name the topics carry is checked against the realm the pool
 %% publishes in before anything starts: a mismatch publishes where nobody
 %% subscribed, and looks exactly like a quiet box.
+%%
+%% The node id is logged because it is how this warden is known: a sentinel
+%% takes its reports only when this id is in its MCL_SENTINEL_WARDENS.
 start(_Opts) ->
     ok = mcl_warden_facts:check_realm_name(),
+    logger:notice("[warden] node id: ~s", [node_id_hex(mcl_om:identity_key())]),
     mcl_warden_sup:start_link().
+
+%% @doc The node id a subscriber sees as this warden's verified publisher,
+%% upper-case hex, or `none' on an ephemeral identity.
+-spec node_id_hex({ok, macula_node_keys:node_key()} | {error, term()}) -> binary().
+node_id_hex({ok, Key}) ->
+    {ok, NodeId} = macula_node_keys:node_id(Key),
+    binary:encode_hex(NodeId);
+node_id_hex({error, _}) ->
+    <<"none">>.
 
 stop(_State) -> ok.
 
