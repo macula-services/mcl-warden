@@ -100,6 +100,12 @@ Two mounts matter, and `deploy/docker-compose.yml` has both:
   recreate mints a new identity and every consumer that knew the warden forgets
   it.
 
+### Admission
+
+None. There is no admission step: a warden links on the PQ profile and the
+identity puzzle, and invite-only is not enforced. A publish is refused only when
+its realm does not match.
+
 ## Health
 
 `/health` reports the **sensor**, because a warden that is alive but blind looks
