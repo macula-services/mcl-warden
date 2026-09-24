@@ -10,9 +10,10 @@
         {realm_name,       "${MCL_REALM_NAME}"},
         %% WHO operates this warden, and WHERE it runs. Display attribution on
         %% every fact, self-asserted; empty means unset and the key is omitted.
-        %% The verified sender is the node identity, not these.
+        %% The verified sender is the node identity, not these. WHERE is the
+        %% box, the same MCL_BOX the boot claim carries to the realm.
         {tenant_id,        "${MCL_WARDEN_TENANT_ID}"},
-        {label,            "${MCL_WARDEN_LABEL}"},
+        {label,            "${MCL_BOX}"},
         %% Declared coordinates, integer micro-degrees ("60170000"), carried on
         %% the check-in. Self-asserted. Empty means no map marker.
         {lat_e6,           "${MCL_WARDEN_LAT_E6}"},
@@ -46,9 +47,6 @@
         %% One org per service, named after the repo, and the same org the
         %% fact topics are owned by. Fixed, not deploy config.
         {org,               <<"mcl-warden">>},
-        %% Informational labels on the realm's provider row (never trusted).
-        {service_name,      <<"mcl-warden">>},
-        {box,               <<"${MCL_WARDEN_LABEL}">>},
         %% THE REALM IS AN APPLICATION ENV, NOT A SHELL VARIABLE, and this file
         %% is the only place the two meet. mcl_om_identity:realm() reads
         %% application:get_env(mcl_om, realm); exporting MCL_REALM in the

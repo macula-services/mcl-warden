@@ -83,7 +83,8 @@ Rules a consumer can rely on:
 | `MACULA_STATION_SEEDS` | required | station hosts, `host[:port]`, comma-separated |
 | `MACULA_STATION_NODE_IDS` | required | the matching 64-hex station node ids, index-paired |
 | `MCL_WARDEN_TENANT_ID` | unset | who runs this warden, shown on every fact |
-| `MCL_WARDEN_LABEL` | unset | which box, shown on every fact |
+| `MCL_SERVICE_NAME` | `mcl-warden` | label on the boot claim the realm's operator sees on the Providers desk |
+| `MCL_BOX` | unset | which box: on the boot claim, and on every fact as the warden's label |
 | `MCL_WARDEN_LAT_E6` / `MCL_WARDEN_LNG_E6` | unset | declared map position, integer micro-degrees (Helsinki `60170000` / `24940000`). Self-asserted |
 | `MCL_WARDEN_TARPIT_PORTS` | `[]` | decoy ports as an Erlang list, e.g. `[2222,2323]`. `[]` opens nothing |
 | `MCL_WARDEN_MAX_CONNS` | `65536` | most tarpit connections held at once |
@@ -145,9 +146,11 @@ What an operator does, in order:
     rebar3 eunit
     rebar3 lint
 
-OTP 28, pinned in `.tool-versions`, the `Containerfile` and CI, and a test fails
-when they disagree with the VM running it. The image build compiles macula's
-NIFs from source, so it needs a Rust toolchain.
+OTP 28.4.3, pinned in `.tool-versions`, the `Containerfile` and CI, and a test
+fails when they disagree with the VM running it. The image builds in the team's
+`ghcr.io/macula-io/macula-ci-otp` and runs on `ghcr.io/macula-io/macula-pq-runtime`
+(Debian trixie, OpenSSL with ML-DSA), both pinned by dated tag and digest; CI
+runs in the same build image. macula's NIFs build from source there.
 
 ## Deployment
 

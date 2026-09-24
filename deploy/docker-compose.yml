@@ -65,9 +65,14 @@ services:
       - MCL_COOKIE=mcl_warden
       # Host networking means a port already bound on this host fails SILENTLY.
       - MCL_HEALTH_PORT=8460
-      # WHO runs this warden and WHERE. Shown on every fact; unset is fine.
+      # WHO runs this warden. Shown on every fact; unset is fine.
       - MCL_WARDEN_TENANT_ID=${MCL_WARDEN_TENANT_ID:-}
-      - MCL_WARDEN_LABEL=${MCL_WARDEN_LABEL:-}
+      # Labels on the claim this service sends the realm at boot, which the
+      # realm's operator sees on the Providers desk: what is asking, and from
+      # which box. MCL_BOX comes from the host that deploys it, and every fact
+      # carries it too, as the warden's label.
+      - MCL_SERVICE_NAME=mcl-warden
+      - MCL_BOX=${MCL_BOX:-}
       # Optional map marker, integer micro-degrees (Helsinki: 60170000 / 24940000).
       - MCL_WARDEN_LAT_E6=${MCL_WARDEN_LAT_E6:-}
       - MCL_WARDEN_LNG_E6=${MCL_WARDEN_LNG_E6:-}
