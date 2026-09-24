@@ -73,6 +73,11 @@ Rules a consumer can rely on:
 - A change to any of this is a new `_v2` topic, not an edit. The contract is
   pinned in `apps/mcl_warden/test/mcl_warden_facts_tests.erl`.
 
+Like every mcl service, it also answers `mcl-warden/info`, which mcl_om adds: its
+name, version and description, its org and claim labels, node id, the macula
+and mcl_om versions, uptime, the health word and the procedures it advertises.
+Open to any mesh caller, public facts only.
+
 ## Configuration
 
 | Variable | Default | Meaning |
