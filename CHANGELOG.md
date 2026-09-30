@@ -1,6 +1,9 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.0 (2026-09-30)
+
+- **On `mcl_om` 0.36 with macula 13.3**, the pair the fleet's stations speak (`~> 0.36`,
+  released versions only). The info test's floors follow.
 
 Ported from `hecate-services/hecate-warden` 0.2.4 onto `mcl_om` and macula 12.
 
