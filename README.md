@@ -94,7 +94,7 @@ Open to any mesh caller, public facts only.
 | `MCL_WARDEN_MAX_CONNS` | `65536` | most tarpit connections held at once |
 | `MCL_WARDEN_AUTH_LOG` | `/host/log/auth.log` | the log inside the container. RHEL family: `/host/log/secure` |
 | `MCL_WARDEN_LOG_DIR` | `/var/log` | (compose) the host directory mounted read-only at `/host/log` |
-| `MCL_HEALTH_PORT` | `8460` | health endpoint; host networking makes a clash a silent bind failure |
+| (none) | `/run/mcl/health.sock` | `/health` is served on this Unix socket inside the container (mcl_om `health_socket`); no health port is bound. `scripts/health.sh` asks it. |
 
 Two mounts matter, and `deploy/docker-compose.yml` has both:
 
@@ -131,7 +131,7 @@ exactly like a quiet night:
 A dark mesh is not a health failure: the warden keeps sensing and drops the
 facts it cannot publish.
 
-`scripts/health.sh [host]` asks a running node.
+`scripts/health.sh [container]` asks a running node, over its health socket.
 
 ## Deploy
 

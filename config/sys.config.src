@@ -42,7 +42,9 @@
         %% recreate without the volume mints a new one, and the warden becomes
         %% a stranger to everyone who knew it.
         {identity_key_path, "/etc/mcl/secrets/identity.key"},
-        {health_port,       ${MCL_HEALTH_PORT}},
+        %% /health on a Unix socket only (mcl_om 0.39): no TCP health
+        %% listener, no health port on the host.
+        {health_socket,     "/run/mcl/health.sock"},
         {capability_topic,  <<"_mesh.cap.">>},
         %% One org per service, named after the repo, and the same org the
         %% fact topics are owned by. Fixed, not deploy config.

@@ -61,7 +61,6 @@ ENV RELX_REPLACE_OS_VARS=true
 ENV MCL_NODE_NAME=mcl_warden
 ENV MCL_NODE_HOST=127.0.0.1
 ENV MCL_COOKIE=mcl_warden
-ENV MCL_HEALTH_PORT=8460
 
 # Every ${VAR} in sys.config must resolve or the term is malformed, so the
 # optional ones default to empty, which the service reads as "unset".
@@ -79,8 +78,10 @@ ENV MCL_WARDEN_AUTH_LOG=/host/log/auth.log
 # does): the key is the warden's verified identity on the mesh.
 VOLUME ["/etc/mcl/secrets"]
 
-EXPOSE 8460
+# /health is served on a Unix socket only (mcl_om health_socket); mcl_om
+# creates the socket, mode 0600, in this directory.
+RUN mkdir -p /run/mcl
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-    CMD curl -fsS "http://127.0.0.1:${MCL_HEALTH_PORT}/health" || exit 1
+    CMD curl -fsS --unix-socket /run/mcl/health.sock http://localhost/health || exit 1
 
 CMD ["/app/bin/mcl_warden", "foreground"]
