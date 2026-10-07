@@ -1,6 +1,6 @@
 {application, mcl_warden, [
     {description, "Deceptive threshold guard: senses intrusion attempts on a public box and reports them to the threat commons"},
-    {vsn, "0.1.0"},
+    {vsn, "0.2.0"},
     {registered, [mcl_warden_sup, sense_auth_log, tarpit_listener, check_in_warden]},
     {mod, {mcl_warden_app, []}},
     {applications, [
