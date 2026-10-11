@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3 (2026-10-11)
+
+- **Rebuilt on macula 14.8.2:** a refused dial backs off further each time (5s doubling, 60s cap), so a station's own refusal (session_proof_rate) clears instead of being hammered forever at the fixed cadence (macula#95).
+
 ## 0.2.2 (2026-10-11)
 
 - **Rebuilt on macula 14.8.1:** a fresh pool's direct dial now reuses a still-handshaking pinned link instead of dialing a duplicate connection the station replaces — the connect → `peer_closed` session loop seen on the Brussels enrollment (mcl-warden#3).
