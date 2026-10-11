@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2 (2026-10-11)
+
+- **Rebuilt on macula 14.8.1:** a fresh pool's direct dial now reuses a still-handshaking pinned link instead of dialing a duplicate connection the station replaces — the connect → `peer_closed` session loop seen on the Brussels enrollment (mcl-warden#3).
+
 ## 0.2.1 (2026-10-10)
 
 - **Rebuilt on macula ~> 14 (newest release):** request admission frees the slot when the reply is sent, and caller attribution covers every payload shape (macula#89, macula#60).
