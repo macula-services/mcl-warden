@@ -17,7 +17,7 @@
 
 info() ->
     #{name => <<"mcl-warden">>,
-      version => <<"0.2.2">>,
+      version => <<"0.2.3">>,
       description => <<"Deceptive threshold guard: senses intrusion attempts on a public box and reports them to the threat commons">>}.
 
 %% The realm name the topics carry is checked against the realm the pool
