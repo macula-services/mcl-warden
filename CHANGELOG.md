@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4 - 2026-10-14
+
+- **Rebuilt on mcl_om 0.40** (mcl-om#25): a lapsed provider delegation claims again and comes back without a restart, and `/health` shows each authorization's `not_after_ms`, degraded as `expiring` with a third or less of its life left.
+
 ## 0.2.3 (2026-10-11)
 
 - **Rebuilt on macula 14.8.2:** a refused dial backs off further each time (5s doubling, 60s cap), so a station's own refusal (session_proof_rate) clears instead of being hammered forever at the fixed cadence (macula#95).
