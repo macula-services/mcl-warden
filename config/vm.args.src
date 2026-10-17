@@ -2,6 +2,10 @@
 -name ${MCL_NODE_NAME}@${MCL_NODE_HOST}
 -setcookie ${MCL_COOKIE}
 
+## The warden runs with network_mode: host, so 0.0.0.0 is the box's public
+## address. Distribution listens on loopback only (mcl-warden#6).
+-kernel inet_dist_use_interface {127,0,0,1}
+
 +K true
 
 ## Async thread pool: the sensor does real file I/O on the auth log.

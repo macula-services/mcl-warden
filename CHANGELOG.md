@@ -3,6 +3,7 @@
 ## 0.3.0 - 2026-10-17
 
 - wire 1.0: on macula 15.6 / mcl_om 1.0 (macula-io/macula#105). A wire 1.0 node and a 0.10.3-fleet node do not interoperate, so this release reaches a box only on the flag day (macula-io/macula-fleet#27).
+- Distribution and epmd listen on loopback only (mcl-warden#6), as in 0.2.6: `-kernel inet_dist_use_interface {127,0,0,1}` in vm.args and `ERL_EPMD_ADDRESS=127.0.0.1` in the image.
 
 ## 0.2.5 - 2026-10-15
 
