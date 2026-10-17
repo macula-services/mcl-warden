@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.6 - 2026-10-17
+
+- Distribution and epmd listen on loopback only (mcl-warden#6). The warden runs with `network_mode: host`, where 0.0.0.0 is the box's public address, so its distribution listener and the epmd it starts (which every other BEAM node on the box registers with) were reachable from the internet behind only the firewall and a cookie. `-kernel inet_dist_use_interface {127,0,0,1}` in vm.args and `ERL_EPMD_ADDRESS=127.0.0.1` in the image bind both to loopback; the node name was already `@127.0.0.1`, so distribution stays on and the release scripts still reach it.
+
 ## 0.2.5 - 2026-10-15
 
 - **Rebuilt on mcl_om 0.42** (mcl-om#26): advertisement renewals move to a 70 s interval under a 280 s TTL (from 30 s / 120 s), so a station sends far fewer renewal frames; the health windows derive from the interval. Carries macula 14.11.0 (mcl_om 0.42's floor).

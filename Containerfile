@@ -61,6 +61,9 @@ ENV RELX_REPLACE_OS_VARS=true
 ENV MCL_NODE_NAME=mcl_warden
 ENV MCL_NODE_HOST=127.0.0.1
 ENV MCL_COOKIE=mcl_warden
+# An epmd this release starts binds loopback only: on a host-networked box
+# every other BEAM node registers with it, and 0.0.0.0 is public (mcl-warden#6).
+ENV ERL_EPMD_ADDRESS=127.0.0.1
 
 # Every ${VAR} in sys.config must resolve or the term is malformed, so the
 # optional ones default to empty, which the service reads as "unset".

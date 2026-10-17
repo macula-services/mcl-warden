@@ -260,6 +260,20 @@ images_are_the_digest_pinned_team_pair_test() ->
                  pinned(".github/workflows/lint.yml",
                         "^\\s+image: (ghcr\\.io/macula-io/macula-ci-otp)" ++ Digest ++ "$")).
 
+%% mcl-warden#6. The warden runs with `network_mode: host', so an address it
+%% binds is the box's own public address. Distribution stays on (the release
+%% scripts reach the node through it), and both of its listeners bind
+%% loopback: the node's distribution port, and an epmd the release starts,
+%% which every other BEAM node on the box registers with.
+distribution_listens_on_loopback_only_test() ->
+    ?assertEqual(<<"{127,0,0,1}">>,
+                 pinned("config/vm.args.src",
+                        "^-kernel inet_dist_use_interface (\\{127,0,0,1\\})$")).
+
+epmd_listens_on_loopback_only_test() ->
+    ?assertEqual(<<"127.0.0.1">>,
+                 pinned("Containerfile", "^ENV ERL_EPMD_ADDRESS=(127\\.0\\.0\\.1)$")).
+
 %% The full release, 28.4.3 and not 28: `otp_release' names only the major.
 running_otp() ->
     {ok, Version} = file:read_file(filename:join([code:root_dir(), "releases",
