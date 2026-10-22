@@ -68,7 +68,6 @@ ENV ERL_EPMD_ADDRESS=127.0.0.1
 # Every ${VAR} in sys.config must resolve or the term is malformed, so the
 # optional ones default to empty, which the service reads as "unset".
 ENV MCL_WARDEN_TENANT_ID=""
-ENV MCL_WARDEN_LABEL=""
 ENV MCL_WARDEN_LAT_E6=""
 ENV MCL_WARDEN_LNG_E6=""
 # Sensing-only by default: no decoy port is bound until an operator lists one.
