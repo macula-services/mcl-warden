@@ -56,10 +56,10 @@
 <rect class="b-sys" x="32" y="222" width="540" height="136" rx="10"/>
 <text class="t-code" x="48" y="250">mcl_warden_service</text>
 <text class="t-type" x="48" y="268">[mcl_om_service behaviour]</text>
-<text class="t-desc" x="48" y="292">The six callbacks mcl_om resolves by name. capabilities/0 is empty: nothing</text>
-<text class="t-desc" x="48" y="308">is callable, the facts are the output. health/0 reports the SENSOR: down</text>
-<text class="t-desc" x="48" y="324">when the log is unreadable or the sensor is not answering, degraded when a</text>
-<text class="t-desc" x="48" y="340">sensor that has read goes quiet for an hour. A dark mesh is not a failure.</text>
+<text class="t-desc" x="48" y="292">The six callbacks mcl_om resolves by name. capabilities/0 is empty, and</text>
+<text class="t-desc" x="48" y="308">the facts are the output. health/0 reports the SENSOR: down when the log</text>
+<text class="t-desc" x="48" y="324">is unreadable or the sensor is not answering, degraded when a sensor</text>
+<text class="t-desc" x="48" y="340">that has read goes quiet for an hour. A dark mesh is not a failure.</text>
 <rect class="b-cmp" x="32" y="390" width="540" height="120" rx="10"/>
 <text class="t-code" x="48" y="418">mcl_warden_sup</text>
 <text class="t-type" x="48" y="436">[supervisor, one_for_one]</text>
@@ -113,13 +113,14 @@
 <text class="t-rel" x="596" y="600">each surface publishes through</text>
 <path class="edge" d="M858 430V462" marker-end="url(#a)"/>
 <text class="t-rel" x="866" y="454">spawns one per connection</text>
-<rect class="b-mac" x="32" y="822" width="540" height="136" rx="10"/>
+<rect class="b-mac" x="32" y="822" width="540" height="152" rx="10"/>
 <text class="t-code" x="48" y="850">mcl_om</text>
 <text class="t-type" x="48" y="868">[library, ~&gt; 1.4]</text>
 <text class="t-desc" x="48" y="892">boot/1: loads the node identity key, joins the realm, dials the pinned</text>
 <text class="t-desc" x="48" y="908">stations over QUIC, serves /health on a Unix socket at</text>
-<text class="t-desc" x="48" y="924">/run/mcl/health.sock, and starts the service. Nothing is advertised.</text>
-<text class="t-desc" x="48" y="940">The facts publish through mcl_om_pubsub:publish/3.</text>
+<text class="t-desc" x="48" y="924">/run/mcl/health.sock, and starts the service. It adds mcl-warden/info</text>
+<text class="t-desc" x="48" y="940">and mcl-warden/get_limits to every service, both open; capabilities/0</text>
+<text class="t-desc" x="48" y="956">is the list. The facts publish through mcl_om_pubsub:publish/3.</text>
 <rect class="b-mac" x="588" y="822" width="540" height="136" rx="10"/>
 <text class="t-code" x="604" y="850">macula</text>
 <text class="t-type" x="604" y="868">[library, ~&gt; 16.0, wire 1.0]</text>
@@ -134,8 +135,8 @@
 <text class="t-desc" x="56" y="1092">/etc/mcl/secrets/identity.key in the mcl-warden-secrets volume; the host's log directory is read-only at /host/log.</text>
 <path class="edge" d="M300 790V822" marker-end="url(#a)"/>
 <text class="t-rel" x="308" y="812">calls boot/1</text>
-<path class="edge" d="M450 678V800H858V822" marker-end="url(#a)"/>
-<text class="t-rel" x="458" y="730">publishes on the mesh</text>
+<path class="edge" d="M450 678V822" marker-end="url(#a)"/>
+<text class="t-rel" x="442" y="764" text-anchor="end">publishes through mcl_om_pubsub:publish/3</text>
 <text class="t-desc" x="40" y="1150">config/sys.config.src fixes the org, mcl-warden, which the fact topics carry, and the realm name; the service refuses to start</text>
 <text class="t-desc" x="40" y="1168">unless sha256 of that name is MCL_REALM. The log is mounted as a DIRECTORY, because a file bind-mount pins the inode and goes blind at the first logrotate.</text>
 <rect class="b-sys" x="24" y="1206" width="22" height="14" rx="3"/>

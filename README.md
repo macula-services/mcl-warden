@@ -50,7 +50,7 @@ on the flag day (macula-io/macula-fleet#27), when the whole fleet moves together
 - **Checks in** every 60 s with `warden_checked_in`, so a consumer builds its
   roster live.
 
-It never blocks, never stores or forwards the log, and holds no event store.
+It never blocks, never stores or forwards the log, and opens no event store.
 Popped, an attacker gains a threat reporter for one box.
 
 | Mode | Ports opened | Risk added |
@@ -97,10 +97,13 @@ Rules a consumer can rely on:
 - A change to any of this is a new `_v2` topic, not an edit. The contract is
   pinned in `apps/mcl_warden/test/mcl_warden_facts_tests.erl`.
 
-Like every mcl service, it also answers `mcl-warden/info`, which mcl_om adds: its
-name, version and description, its org and claim labels, node id, the macula
-and mcl_om versions, uptime, the health word and the procedures it advertises.
-Open to any mesh caller, public facts only.
+The warden serves no procedure of its own, so `capabilities/0` is empty: its
+output is the facts. `mcl_om` adds `mcl-warden/info` and `mcl-warden/get_limits`
+to every service, both open to any mesh caller, public facts only. `info`
+answers with its name, version and description, its org and claim labels, node
+id, the macula and mcl_om versions, uptime, the health word and the procedures
+it advertises. `get_limits` answers with the inbound guard's limits and
+current-window stats, for a named procedure or for the whole declared set.
 
 ## Configuration
 

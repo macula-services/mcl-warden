@@ -182,10 +182,10 @@ def components():
            "and then starts this service. Storeless: the service exports no store_id/0",
            "or data_dir/0, so no reckon-db is opened."], code=True)
     d.box("b-sys", 32, 222, 540, 136, "mcl_warden_service", "[mcl_om_service behaviour]",
-          ["The six callbacks mcl_om resolves by name. capabilities/0 is empty: nothing",
-           "is callable, the facts are the output. health/0 reports the SENSOR: down",
-           "when the log is unreadable or the sensor is not answering, degraded when a",
-           "sensor that has read goes quiet for an hour. A dark mesh is not a failure."], code=True)
+          ["The six callbacks mcl_om resolves by name. capabilities/0 is empty, and",
+           "the facts are the output. health/0 reports the SENSOR: down when the log",
+           "is unreadable or the sensor is not answering, degraded when a sensor",
+           "that has read goes quiet for an hour. A dark mesh is not a failure."], code=True)
     d.box("b-cmp", 32, 390, 540, 120, "mcl_warden_sup", "[supervisor, one_for_one]",
           ["Three children, each owning its own work and publishing its own fact:",
            "sense_auth_log, tarpit_listener and check_in_warden. There is no central",
@@ -224,11 +224,12 @@ def components():
     d.edge("M588 600H572"); d.text("t-rel", 596, 600, "each surface publishes through")
     d.edge("M858 430V462"); d.text("t-rel", 866, 454, "spawns one per connection")
 
-    d.box("b-mac", 32, 822, 540, 136, "mcl_om", "[library, ~> 1.4]",
+    d.box("b-mac", 32, 822, 540, 152, "mcl_om", "[library, ~> 1.4]",
           ["boot/1: loads the node identity key, joins the realm, dials the pinned",
            "stations over QUIC, serves /health on a Unix socket at",
-           "/run/mcl/health.sock, and starts the service. Nothing is advertised.",
-           "The facts publish through mcl_om_pubsub:publish/3."],
+           "/run/mcl/health.sock, and starts the service. It adds mcl-warden/info",
+           "and mcl-warden/get_limits to every service, both open; capabilities/0",
+           "is the list. The facts publish through mcl_om_pubsub:publish/3."],
           code=True)
     d.box("b-mac", 588, 822, 540, 136, "macula", "[library, ~> 16.0, wire 1.0]",
           ["QUIC transport and the signed records the mesh DHT holds. Every fact",
@@ -240,7 +241,7 @@ def components():
            "/etc/mcl/secrets/identity.key in the mcl-warden-secrets volume; the host's log directory is read-only at /host/log."],
           code=True)
     d.edge("M300 790V822"); d.text("t-rel", 308, 812, "calls boot/1")
-    d.edge("M450 678V800H858V822"); d.text("t-rel", 458, 730, "publishes on the mesh")
+    d.edge("M450 678V822"); d.text("t-rel", 442, 764, "publishes through mcl_om_pubsub:publish/3", anchor="end")
     d.text("t-desc", 40, 1150, "config/sys.config.src fixes the org, mcl-warden, which the fact topics carry, and the realm name; the service refuses to start")
     d.text("t-desc", 40, 1168, "unless sha256 of that name is MCL_REALM. The log is mounted as a DIRECTORY, because a file bind-mount pins the inode and goes blind at the first logrotate.")
     d.legend(1206)
