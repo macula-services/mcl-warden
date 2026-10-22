@@ -75,7 +75,8 @@ quiet(false, _Silent) -> ok.
 silence_limit_ms() ->
     application:get_env(mcl_warden, auth_log_silence_ms, 3600000).
 
-%% Nothing callable. The warden's whole output is its three published facts.
+%% No capability of its own: mcl_om adds the open info and get_limits to every
+%% service, and the warden's output is its three published facts.
 capabilities() -> [].
 
 %% THE AUTHORITY THIS SERVICE ASKS THE REALM FOR, and deliberately nothing more.

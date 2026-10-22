@@ -97,9 +97,11 @@ Rules a consumer can rely on:
 - A change to any of this is a new `_v2` topic, not an edit. The contract is
   pinned in `apps/mcl_warden/test/mcl_warden_facts_tests.erl`.
 
-Like every mcl service, it also answers `mcl-warden/info`, which mcl_om adds: its
-name, version and description, its org and claim labels, node id, the macula
-and mcl_om versions, uptime, the health word and the procedures it advertises.
+Like every mcl service, it also answers the open procedures mcl_om adds:
+`mcl-warden/info` gives its name, version and description, its org and claim
+labels, node id, the macula and mcl_om versions, uptime, the health word and the
+procedures it advertises; `mcl-warden/get_limits` gives the inbound guard's
+limits and current-window stats.
 Open to any mesh caller, public facts only.
 
 ## Configuration
@@ -185,7 +187,7 @@ runs in the same build image. macula's NIFs build from source there.
 
 A `v*` tag publishes `ghcr.io/macula-services/mcl-warden:<version>` and nothing else, signed
 by digest with its SBOM and provenance (macula-ci-images' `attest-image.yml`). A push to
-`main` publishes `:main` and `:<sha>`, which nothing follows, and nothing moves `:latest`.
+`main` publishes `:main` and `:<sha>`, which no box follows. `:latest` moves only on a release tag.
 The fleet runs a release by digest: macula-fleet's pin-releases workflow finds the signed
 release, verifies it was signed on its tag and pins `<version>@sha256:<digest>`
 (macula-fleet#14, #15), so a green `v*` tag is the deploy. To roll back, revert the pin and

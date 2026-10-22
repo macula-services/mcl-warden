@@ -7,7 +7,7 @@ of, without reading it.*
 host's auth log, holds attackers on decoy ports when the tarpit is switched on,
 and check-ins every 60 s. `capabilities/0` is empty and no reckon-db is opened:
 the facts are its output, and `mcl_om` adds the open `info` and `get_limits` to
-every service, so those two are the only procedures carrying its name.
+every service, so those are the procedures carrying its name.
 
 ## Level 1: system context
 
@@ -20,7 +20,7 @@ every service, so those two are the only procedures carrying its name.
 | Service operator | Person | Runs the box, sets the realm and the box label, opens the decoy ports in the firewall, and lists the warden's node id where a sentinel reads it |
 | A sentinel, or any consumer | External system | Subscribes to the three watch facts and builds its roster from the check-ins; attributes each fact by the verified publisher, never by the payload |
 | The box's sshd and auth log | External system | sshd writes every failed login to its auth log; the directory is mounted read-only at `/host/log`, and the sensor follows it across rotation by inode |
-| macula-realm | Macula infrastructure | Endorses the node's identity key and admits the boot claim. No provider authorization is asked for, because nothing is callable |
+| macula-realm | Macula infrastructure | Endorses the node's identity key and admits the boot claim. No provider authorization is asked for, because the warden serves no procedure of its own |
 | Macula stations, mesh DHT | Macula infrastructure | The pinned seeds in `MACULA_STATION_SEEDS` carry every fact over QUIC; the DHT holds the node's advertisement |
 
 The warden never touches sshd, never blocks an address and never stores the log.
@@ -32,14 +32,14 @@ The warden never touches sshd, never blocks an address and never stores the log.
 | Component | Technology | Responsibility |
 | --- | --- | --- |
 | `mcl_warden_app` | OTP application | Calls `mcl_om:boot/1`, which wires the mesh, the realm identity and health and then starts the service. Storeless: the service exports no `store_id/0` or `data_dir/0` |
-| `mcl_warden_service` | the `mcl_om_service` behaviour | The six callbacks. `capabilities/0` is empty; `health/0` reports the sensor, `down` when the log is unreadable or the sensor is not answering, `degraded` when a sensor that has read goes quiet for an hour. A dark mesh is deliberately not a health failure |
+| `mcl_warden_service` | the `mcl_om_service` behaviour | The `mcl_om_service` callbacks. `capabilities/0` is empty; `health/0` reports the sensor, `down` when the log is unreadable or the sensor is not answering, `degraded` when a sensor that has read goes quiet for an hour. A dark mesh is deliberately not a health failure |
 | `mcl_warden_sup` | supervisor, `one_for_one` | Three children, each owning its own work and publishing its own fact. There is no central manager |
 | `sense_auth_log` | `gen_server`, tails the auth log | Polls every 2 s and follows rotation by inode. Five failed logins from one source in five minutes publish `attacker_sighted`; the same source is reported again at most every 10 minutes |
 | `tarpit_listener` | `gen_server`, binds the decoy ports | Opt-in through `MCL_WARDEN_TARPIT_PORTS`, empty by default. Accepts connections up to `MCL_WARDEN_MAX_CONNS` held, and never reads a byte the attacker sends |
 | `tarpit_connection` | one held connection | Dribbles a random fake SSH pre-banner line and never sends the line that would start the handshake. When the attacker gives up, `held_ms` is published as `attacker_ensnared` |
 | `check_in_warden` | `gen_server`, the heartbeat | Publishes `warden_checked_in` every 60 s with `tarpit` (1/0), `interval_s` and `at_ms`, so a consumer builds its roster live |
 | `mcl_warden_facts` | the three published facts | Builds and publishes `attacker_sighted_v1`, `attacker_ensnared_v1` and `warden_checked_in_v1` under `<realm>/mcl-warden/warden/watch/`. Values are binaries, integers and lists of binaries: no booleans, no atoms, no floats |
-| `mcl_om` | library, `~> 1.4` | `boot/1`: loads the node identity key, joins the realm, dials the pinned stations over QUIC, serves `/health` on a Unix socket at `/run/mcl/health.sock`, and starts the service. Nothing is advertised. The facts publish through `mcl_om_pubsub:publish/3` |
+| `mcl_om` | library, `~> 1.4` | `boot/1`: loads the node identity key, joins the realm, dials the pinned stations over QUIC, serves `/health` on a Unix socket at `/run/mcl/health.sock`, and starts the service, registering the open `info` and `get_limits` every service carries. The facts publish through `mcl_om_pubsub:publish/3` |
 | macula | library, `~> 16.0`, wire 1.0 | QUIC transport, and the signed records the mesh DHT holds. Every fact carries the node identity its link verified |
 | The host | environment and mounts | `MCL_WARDEN_AUTH_LOG`, `MCL_WARDEN_TARPIT_PORTS`, `MCL_WARDEN_MAX_CONNS`, `MCL_WARDEN_TENANT_ID`, `MCL_BOX`, the declared coordinates, and the realm and station variables. The identity key is a named volume at `/etc/mcl/secrets`; the host's log directory is read-only at `/host/log` |
 
