@@ -119,12 +119,13 @@
 <text class="t-desc" x="48" y="892">boot/1: loads the node identity key, joins the realm, dials the pinned</text>
 <text class="t-desc" x="48" y="908">stations over QUIC, serves /health on a Unix socket at</text>
 <text class="t-desc" x="48" y="924">/run/mcl/health.sock, and starts the service. Nothing is advertised.</text>
+<text class="t-desc" x="48" y="940">The facts publish through mcl_om_pubsub:publish/3.</text>
 <rect class="b-mac" x="588" y="822" width="540" height="136" rx="10"/>
 <text class="t-code" x="604" y="850">macula</text>
 <text class="t-type" x="604" y="868">[library, ~&gt; 16.0, wire 1.0]</text>
-<text class="t-desc" x="604" y="892">QUIC transport, the publish path mcl_warden_facts calls, and the signed</text>
-<text class="t-desc" x="604" y="908">records the mesh DHT holds. Every fact carries the node identity its link</text>
-<text class="t-desc" x="604" y="924">verified, which is how a consumer attributes and allowlists this warden.</text>
+<text class="t-desc" x="604" y="892">QUIC transport and the signed records the mesh DHT holds. Every fact</text>
+<text class="t-desc" x="604" y="908">carries the node identity its link verified, which is how a consumer</text>
+<text class="t-desc" x="604" y="924">attributes and allowlists this warden.</text>
 <rect class="b-ext" x="40" y="990" width="1080" height="120" rx="10"/>
 <text class="t-code" x="56" y="1018">The host</text>
 <text class="t-type" x="56" y="1036">[environment and mounts; both are in the compose file]</text>
