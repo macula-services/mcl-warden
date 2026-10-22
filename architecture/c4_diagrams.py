@@ -227,12 +227,13 @@ def components():
     d.box("b-mac", 32, 822, 540, 136, "mcl_om", "[library, ~> 1.4]",
           ["boot/1: loads the node identity key, joins the realm, dials the pinned",
            "stations over QUIC, serves /health on a Unix socket at",
-           "/run/mcl/health.sock, and starts the service. Nothing is advertised."],
+           "/run/mcl/health.sock, and starts the service. Nothing is advertised.",
+           "The facts publish through mcl_om_pubsub:publish/3."],
           code=True)
     d.box("b-mac", 588, 822, 540, 136, "macula", "[library, ~> 16.0, wire 1.0]",
-          ["QUIC transport, the publish path mcl_warden_facts calls, and the signed",
-           "records the mesh DHT holds. Every fact carries the node identity its link",
-           "verified, which is how a consumer attributes and allowlists this warden."], code=True)
+          ["QUIC transport and the signed records the mesh DHT holds. Every fact",
+           "carries the node identity its link verified, which is how a consumer",
+           "attributes and allowlists this warden."], code=True)
     d.box("b-ext", 40, 990, 1080, 120, "The host", "[environment and mounts; both are in the compose file]",
           ["MCL_WARDEN_AUTH_LOG (the mounted host log), MCL_WARDEN_TARPIT_PORTS, MCL_WARDEN_MAX_CONNS, MCL_WARDEN_TENANT_ID,",
            "MCL_BOX, MCL_WARDEN_LAT_E6, MCL_WARDEN_LNG_E6, and the realm and station variables. The identity key is",
