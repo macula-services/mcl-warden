@@ -140,19 +140,19 @@ def context():
     d.box("b-ext", 720, 30, 320, 136, "A sentinel, or any consumer", "[External system]",
           ["Subscribes to the three watch facts", "and builds its roster from the",
            "check-ins; attributes each one by", "the verified publisher."])
-    d.box("b-sys", 390, 230, 320, 152, "mcl-warden", "[mcl_om mesh service, own box]",
+    d.box("b-sys", 390, 230, 320, 152, "mcl-warden", "[mcl_om mesh service]",
           ["Reads the host's auth log, holds", "attackers on decoy ports, and",
-           "publishes what it sees on three", "facts. Holds no store, offers no",
-           "procedure of its own, never blocks."])
+           "publishes what it sees on three", "facts. Holds no store; its own set is",
+           "empty; it never blocks."])
     d.box("b-ext", 40, 470, 320, 136, "The box's sshd and auth log", "[External system]",
           ["sshd writes every failed login to", "its auth log; the directory is",
            "mounted read-only at /host/log.", "The sensor tails it by inode."])
-    d.box("b-mac", 390, 470, 320, 120, "macula-realm", "[Macula infrastructure]",
-          ["Endorses the node's identity key", "and admits the boot claim; no",
-           "provider authorization is asked for."])
+    d.box("b-mac", 390, 470, 320, 136, "macula-realm", "[Macula infrastructure]",
+          ["Endorses the node's identity key,", "admits the boot claim, and grants a",
+           "provider authorization per org", "procedure."])
     d.box("b-mac", 720, 470, 320, 136, "Macula stations, mesh DHT", "[Macula infrastructure]",
           ["The pinned seeds in", "MACULA_STATION_SEEDS carry every fact",
-           "over QUIC; the DHT holds the node's", "advertisement."])
+           "over QUIC; the DHT holds a record", "for each org procedure."])
 
     d.edge("M180 166V200H440V230")
     d.text("t-rel", 188, 180, "fails logins, and probes the decoy ports")
@@ -181,12 +181,13 @@ def components():
           ["Calls mcl_om:boot/1, which wires the mesh, the realm identity and health",
            "and then starts this service. Storeless: the service exports no store_id/0",
            "or data_dir/0, so no reckon-db is opened."], code=True)
-    d.box("b-sys", 32, 222, 540, 136, "mcl_warden_service", "[mcl_om_service behaviour]",
-          ["The six callbacks mcl_om resolves by name. capabilities/0 is empty: nothing",
-           "is callable, the facts are the output. health/0 reports the SENSOR: down",
-           "when the log is unreadable or the sensor is not answering, degraded when a",
-           "sensor that has read goes quiet for an hour. A dark mesh is not a failure."], code=True)
-    d.box("b-cmp", 32, 390, 540, 120, "mcl_warden_sup", "[supervisor, one_for_one]",
+    d.box("b-sys", 32, 222, 540, 152, "mcl_warden_service", "[mcl_om_service behaviour]",
+          ["The callbacks mcl_om resolves by name. Its capabilities/0 is empty",
+           "and mcl_om adds the open info and get_limits, info/0 included. health/0",
+           "reports the SENSOR: down when the log is unreadable or the sensor is",
+           "not answering, degraded when one that has read goes quiet for an hour.",
+           "A dark mesh is not a failure."], code=True)
+    d.box("b-cmp", 32, 406, 540, 120, "mcl_warden_sup", "[supervisor, one_for_one]",
           ["Three children, each owning its own work and publishing its own fact:",
            "sense_auth_log, tarpit_listener and check_in_warden. There is no central",
            "manager."], code=True)
@@ -240,8 +241,10 @@ def components():
            "MCL_BOX, MCL_WARDEN_LAT_E6, MCL_WARDEN_LNG_E6, and the realm and station variables. The identity key is",
            "/etc/mcl/secrets/identity.key in the mcl-warden-secrets volume; the host's log directory is read-only at /host/log."],
           code=True)
-    d.edge("M300 790V822"); d.text("t-rel", 308, 812, "calls boot/1")
-    d.edge("M450 678V800H858V822"); d.text("t-rel", 458, 730, "publishes on the mesh")
+    # From the application box itself, down the free corridor between the two columns, into mcl_om.
+    d.edge("M300 190V205H580V812H560V822"); d.text("t-rel", 468, 810, "calls boot/1")
+    # The facts publish through mcl_om's pubsub, so the edge ends at mcl_om, not at macula.
+    d.edge("M450 678V800H300V822"); d.text("t-rel", 336, 786, "publishes through mcl_om")
     d.text("t-desc", 40, 1150, "config/sys.config.src fixes the org, mcl-warden, which the fact topics carry, and the realm name; the service refuses to start")
     d.text("t-desc", 40, 1168, "unless sha256 of that name is MCL_REALM. The log is mounted as a DIRECTORY, because a file bind-mount pins the inode and goes blind at the first logrotate.")
     d.legend(1206)

@@ -33,8 +33,9 @@ Released as 0.2.0 on macula 14.2 through `mcl_om` 0.38. It replaces
 the macula 10 warden service and inherits nothing from it: no identity, no
 volume, no topic.
 
-0.3.0 moves it to wire 1.0: macula 15.6 through `mcl_om` 1.0. It reaches a box
-on the flag day (macula-io/macula-fleet#27), when the whole fleet moves together.
+0.3.0 moves it to wire 1.0: macula 15.6 through `mcl_om` 1.0. The flag day
+(macula-io/macula-fleet#27) is past: `edge/gitops/release-targets` pins this image
+0.3.0 on twelve boxes, canary first and the rest after it.
 
 ## What it does
 
@@ -187,7 +188,7 @@ runs in the same build image. macula's NIFs build from source there.
 
 A `v*` tag publishes `ghcr.io/macula-services/mcl-warden:<version>` and nothing else, signed
 by digest with its SBOM and provenance (macula-ci-images' `attest-image.yml`). A push to
-`main` publishes `:main` and `:<sha>`, which no box follows. `:latest` moves only on a release tag.
+`main` publishes `:main` and `:<sha>`, which no box follows. Nothing moves `:latest` at all.
 The fleet runs a release by digest: macula-fleet's pin-releases workflow finds the signed
 release, verifies it was signed on its tag and pins `<version>@sha256:<digest>`
 (macula-fleet#14, #15), so a green `v*` tag is the deploy. To roll back, revert the pin and

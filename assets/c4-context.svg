@@ -68,12 +68,12 @@
 <text class="t-desc" x="736" y="148">the verified publisher.</text>
 <rect class="b-sys" x="390" y="230" width="320" height="152" rx="10"/>
 <text class="t-name" x="406" y="258">mcl-warden</text>
-<text class="t-type" x="406" y="276">[mcl_om mesh service, own box]</text>
+<text class="t-type" x="406" y="276">[mcl_om mesh service]</text>
 <text class="t-desc" x="406" y="300">Reads the host's auth log, holds</text>
 <text class="t-desc" x="406" y="316">attackers on decoy ports, and</text>
 <text class="t-desc" x="406" y="332">publishes what it sees on three</text>
-<text class="t-desc" x="406" y="348">facts. Holds no store, offers no</text>
-<text class="t-desc" x="406" y="364">procedure of its own, never blocks.</text>
+<text class="t-desc" x="406" y="348">facts. Holds no store; its own set is</text>
+<text class="t-desc" x="406" y="364">empty; it never blocks.</text>
 <rect class="b-ext" x="40" y="470" width="320" height="136" rx="10"/>
 <text class="t-name" x="56" y="498">The box's sshd and auth log</text>
 <text class="t-type" x="56" y="516">[External system]</text>
@@ -81,19 +81,20 @@
 <text class="t-desc" x="56" y="556">its auth log; the directory is</text>
 <text class="t-desc" x="56" y="572">mounted read-only at /host/log.</text>
 <text class="t-desc" x="56" y="588">The sensor tails it by inode.</text>
-<rect class="b-mac" x="390" y="470" width="320" height="120" rx="10"/>
+<rect class="b-mac" x="390" y="470" width="320" height="136" rx="10"/>
 <text class="t-name" x="406" y="498">macula-realm</text>
 <text class="t-type" x="406" y="516">[Macula infrastructure]</text>
-<text class="t-desc" x="406" y="540">Endorses the node's identity key</text>
-<text class="t-desc" x="406" y="556">and admits the boot claim; no</text>
-<text class="t-desc" x="406" y="572">provider authorization is asked for.</text>
+<text class="t-desc" x="406" y="540">Endorses the node's identity key,</text>
+<text class="t-desc" x="406" y="556">admits the boot claim, and grants a</text>
+<text class="t-desc" x="406" y="572">provider authorization per org</text>
+<text class="t-desc" x="406" y="588">procedure.</text>
 <rect class="b-mac" x="720" y="470" width="320" height="136" rx="10"/>
 <text class="t-name" x="736" y="498">Macula stations, mesh DHT</text>
 <text class="t-type" x="736" y="516">[Macula infrastructure]</text>
 <text class="t-desc" x="736" y="540">The pinned seeds in</text>
 <text class="t-desc" x="736" y="556">MACULA_STATION_SEEDS carry every fact</text>
-<text class="t-desc" x="736" y="572">over QUIC; the DHT holds the node's</text>
-<text class="t-desc" x="736" y="588">advertisement.</text>
+<text class="t-desc" x="736" y="572">over QUIC; the DHT holds a record</text>
+<text class="t-desc" x="736" y="588">for each org procedure.</text>
 <path class="edge" d="M180 166V200H440V230" marker-end="url(#a)"/>
 <text class="t-rel" x="188" y="180">fails logins, and probes the decoy ports</text>
 <path class="edge" d="M540 150V230" marker-end="url(#a)"/>

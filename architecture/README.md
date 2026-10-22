@@ -3,7 +3,7 @@
 *This exists so a reader can see what mcl-warden talks to, and what it is made
 of, without reading it.*
 
-**Status: three published facts, no procedures of its own, no store.** The service tails the
+**Status: no procedures of its own, no store; three facts are its output.** The service tails the
 host's auth log, holds attackers on decoy ports when the tarpit is switched on,
 and check-ins every 60 s. `capabilities/0` is empty and no reckon-db is opened:
 the facts are its output, and `mcl_om` adds the open `info` and `get_limits` to
@@ -15,13 +15,13 @@ every service, so those are the procedures carrying its name.
 
 | Element | Kind | Role |
 | --- | --- | --- |
-| mcl-warden | In scope | Reads the host's auth log, holds attackers on decoy ports, and publishes what it sees on three facts. One OTP release in one container, an `mcl_om` mesh service on its own box. It never blocks, offers no procedure of its own and holds no store |
+| mcl-warden | In scope | Reads the host's auth log, holds attackers on decoy ports, and publishes what it sees on three facts. One OTP release in one container, an `mcl_om` mesh service. It never blocks, offers no procedure of its own and holds no store |
 | An attacker | External system | Fails logins on the box's real sshd, and probes whatever else is open, including the decoy ports when the tarpit is on |
 | Service operator | Person | Runs the box, sets the realm and the box label, opens the decoy ports in the firewall, and lists the warden's node id where a sentinel reads it |
 | A sentinel, or any consumer | External system | Subscribes to the three watch facts and builds its roster from the check-ins; attributes each fact by the verified publisher, never by the payload |
 | The box's sshd and auth log | External system | sshd writes every failed login to its auth log; the directory is mounted read-only at `/host/log`, and the sensor follows it across rotation by inode |
-| macula-realm | Macula infrastructure | Endorses the node's identity key and admits the boot claim. No provider authorization is asked for, because the warden serves no procedure of its own |
-| Macula stations, mesh DHT | Macula infrastructure | The pinned seeds in `MACULA_STATION_SEEDS` carry every fact over QUIC; the DHT holds the node's advertisement |
+| macula-realm | Macula infrastructure | Endorses the node's identity key, admits the boot claim, and grants a a provider authorization per org procedure: the open `info` and `get_limits` `mcl_om` adds to every service. Without that grant `/health` reads degraded |
+| Macula stations, mesh DHT | Macula infrastructure | The pinned seeds in `MACULA_STATION_SEEDS` carry every fact over QUIC; the DHT holds an advertisement per org procedure |
 
 The warden never touches sshd, never blocks an address and never stores the log.
 
