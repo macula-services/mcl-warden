@@ -114,7 +114,7 @@ Open to any mesh caller, public facts only.
 | `MCL_WARDEN_TENANT_ID` | unset | who runs this warden, shown on every fact |
 | `MCL_SERVICE_NAME` | `mcl-warden` | label on the boot claim the realm's operator sees on the Providers desk |
 | `MCL_BOX` | unset | which box: on the boot claim, and on every fact as the warden's label |
-| `MCL_WARDEN_LAT_E6` / `MCL_WARDEN_LNG_E6` | unset | declared map position, integer micro-degrees (Helsinki `60170000` / `24940000`). Self-asserted |
+| `MCL_WARDEN_LAT_E6` / `MCL_WARDEN_LNG_E6` | unset | declared map position, integer micro-degrees (for example `60170000` / `24940000`). Self-asserted |
 | `MCL_WARDEN_TARPIT_PORTS` | `[]` | decoy ports as an Erlang list, e.g. `[2222,2323]`. `[]` opens nothing |
 | `MCL_WARDEN_MAX_CONNS` | `65536` | most tarpit connections held at once |
 | `MCL_WARDEN_AUTH_LOG` | `/host/log/auth.log` | the log inside the container. RHEL family: `/host/log/secure` |

@@ -71,7 +71,7 @@ services:
       # carries it too, as the warden's label.
       - MCL_SERVICE_NAME=mcl-warden
       - MCL_BOX=${MCL_BOX:-}
-      # Optional map marker, integer micro-degrees (Helsinki: 60170000 / 24940000).
+      # Optional map marker, integer micro-degrees (e.g. 60170000 / 24940000).
       - MCL_WARDEN_LAT_E6=${MCL_WARDEN_LAT_E6:-}
       - MCL_WARDEN_LNG_E6=${MCL_WARDEN_LNG_E6:-}
       # [] opens nothing. List decoy ports to turn the tarpit on, e.g. [2222,2323],
