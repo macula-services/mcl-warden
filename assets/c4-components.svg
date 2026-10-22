@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 1230" role="img" aria-label="mcl-warden components">
+<title>mcl-warden components</title>
+<style>
+.t-name { font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; }
+.t-desc { font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif; font-size: 12.5px; }
+.t-rel { font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif; font-size: 11.5px; paint-order: stroke; stroke-width: 4px; stroke-linejoin: round; }
+.t-code { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 13px; font-weight: 600; }
+.t-type { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 11.5px; }
+.t-bound { font-family: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size: 12px; font-weight: 600; }
+.t-leg { font-family: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif; font-size: 12px; }
+.edge { fill: none; stroke-width: 1.25; }
+.edge-later { fill: none; stroke-width: 1.25; stroke-dasharray: 5 4; }
+.bg { fill: #FFFFFF; }
+.b-sys { fill: #F5E9CC; stroke: #A56F0A; stroke-width: 2; }
+.b-per { fill: #E3EBF2; stroke: #3B5B7A; stroke-width: 1.25; }
+.b-mac { fill: #E6E4EE; stroke: #5E5A78; stroke-width: 1.25; }
+.b-ext { fill: #ECEFED; stroke: #8A9791; stroke-width: 1.25; }
+.b-cmp { fill: #FFFFFF; stroke: #8A9791; stroke-width: 1.25; }
+.b-later { fill: none; stroke: #8A9791; stroke-width: 1.25; stroke-dasharray: 5 4; }
+.bound { fill: none; stroke: #B3BDB8; stroke-width: 1; }
+.head { fill: #3B5B7A; }
+.t-name, .t-code { fill: #16201D; }
+.t-type, .t-bound, .t-leg { fill: #66736E; }
+.t-desc { fill: #34413C; }
+.t-rel { fill: #66736E; stroke: #FFFFFF; }
+.edge, .edge-later { stroke: #8A9791; }
+.arrowhead { fill: #8A9791; }
+@media (prefers-color-scheme: dark) {
+.bg { fill: #171F1C; }
+.b-sys { fill: #3A2E13; stroke: #E3AA3C; }
+.b-per { fill: #1D2A36; stroke: #8EB4D8; }
+.b-mac { fill: #26243A; stroke: #A9A4C8; }
+.b-ext { fill: #1C2421; stroke: #7D8B85; }
+.b-cmp { fill: #171F1C; stroke: #7D8B85; }
+.b-later { stroke: #7D8B85; }
+.bound { stroke: #4A5752; }
+.head { fill: #8EB4D8; }
+.t-name, .t-code { fill: #E6ECE9; }
+.t-type, .t-bound, .t-leg { fill: #93A09A; }
+.t-desc { fill: #C3CDC8; }
+.t-rel { fill: #93A09A; stroke: #171F1C; }
+.edge, .edge-later { stroke: #7D8B85; }
+.arrowhead { fill: #7D8B85; }
+}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0 0L10 5L0 10z"/></marker></defs>
+<rect class="bg" x="0" y="0" width="1160" height="1230"/>
+<rect class="bound" x="16" y="40" width="1128" height="750" rx="12"/>
+<text class="t-bound" x="32" y="62">mcl-warden [Container: one OTP release]</text>
+<rect class="b-cmp" x="32" y="70" width="540" height="120" rx="10"/>
+<text class="t-code" x="48" y="98">mcl_warden_app</text>
+<text class="t-type" x="48" y="116">[OTP application]</text>
+<text class="t-desc" x="48" y="140">Calls mcl_om:boot/1, which wires the mesh, the realm identity and health</text>
+<text class="t-desc" x="48" y="156">and then starts this service. Storeless: the service exports no store_id/0</text>
+<text class="t-desc" x="48" y="172">or data_dir/0, so no reckon-db is opened.</text>
+<rect class="b-sys" x="32" y="222" width="540" height="136" rx="10"/>
+<text class="t-code" x="48" y="250">mcl_warden_service</text>
+<text class="t-type" x="48" y="268">[mcl_om_service behaviour]</text>
+<text class="t-desc" x="48" y="292">The six callbacks mcl_om resolves by name. capabilities/0 is empty: nothing</text>
+<text class="t-desc" x="48" y="308">is callable, the facts are the output. health/0 reports the SENSOR: down</text>
+<text class="t-desc" x="48" y="324">when the log is unreadable or the sensor is not answering, degraded when a</text>
+<text class="t-desc" x="48" y="340">sensor that has read goes quiet for an hour. A dark mesh is not a failure.</text>
+<rect class="b-cmp" x="32" y="390" width="540" height="120" rx="10"/>
+<text class="t-code" x="48" y="418">mcl_warden_sup</text>
+<text class="t-type" x="48" y="436">[supervisor, one_for_one]</text>
+<text class="t-desc" x="48" y="460">Three children, each owning its own work and publishing its own fact:</text>
+<text class="t-desc" x="48" y="476">sense_auth_log, tarpit_listener and check_in_warden. There is no central</text>
+<text class="t-desc" x="48" y="492">manager.</text>
+<rect class="b-cmp" x="32" y="542" width="540" height="136" rx="10"/>
+<text class="t-code" x="48" y="570">mcl_warden_facts</text>
+<text class="t-type" x="48" y="588">[the three published facts]</text>
+<text class="t-desc" x="48" y="612">Builds and publishes attacker_sighted_v1, attacker_ensnared_v1 and</text>
+<text class="t-desc" x="48" y="628">warden_checked_in_v1 under &lt;realm&gt;/mcl-warden/warden/watch/. Values are</text>
+<text class="t-desc" x="48" y="644">binaries, integers and lists of binaries: no booleans (tarpit is 1/0), no</text>
+<text class="t-desc" x="48" y="660">atoms, no floats. tenant_id and label are self-asserted, not the sender.</text>
+<rect class="bound" x="588" y="70" width="540" height="700" rx="12"/>
+<text class="t-bound" x="604" y="92">the warden's three surfaces, started by mcl_warden_sup</text>
+<rect class="b-cmp" x="604" y="110" width="508" height="152" rx="10"/>
+<text class="t-code" x="620" y="138">sense_auth_log</text>
+<text class="t-type" x="620" y="156">[gen_server, tails the auth log]</text>
+<text class="t-desc" x="620" y="180">Polls the mounted log every 2 s and follows it across rotation by inode.</text>
+<text class="t-desc" x="620" y="196">Five failed logins from one source in five minutes publish</text>
+<text class="t-desc" x="620" y="212">attacker_sighted with the address, the count and the usernames tried; the</text>
+<text class="t-desc" x="620" y="228">same source is reported again at most every 10 minutes. IPv6 is lower-case</text>
+<text class="t-desc" x="620" y="244">and compressed, and an IPv4-mapped address is reported as IPv4.</text>
+<rect class="b-cmp" x="604" y="294" width="508" height="136" rx="10"/>
+<text class="t-code" x="620" y="322">tarpit_listener</text>
+<text class="t-type" x="620" y="340">[gen_server, binds the decoy ports]</text>
+<text class="t-desc" x="620" y="364">Opt-in through MCL_WARDEN_TARPIT_PORTS, empty by default. Binds each decoy</text>
+<text class="t-desc" x="620" y="380">port, accepts every connection and hands it to a tarpit_connection, up to</text>
+<text class="t-desc" x="620" y="396">MCL_WARDEN_MAX_CONNS held at once; past the cap a connection is closed.</text>
+<text class="t-desc" x="620" y="412">It never reads a byte the attacker sends, and it never blocks anyone.</text>
+<rect class="b-cmp" x="604" y="462" width="508" height="120" rx="10"/>
+<text class="t-code" x="620" y="490">tarpit_connection</text>
+<text class="t-type" x="620" y="508">[one held connection]</text>
+<text class="t-desc" x="620" y="532">Dribbles a random fake SSH pre-banner line every drip interval and never</text>
+<text class="t-desc" x="620" y="548">sends the line that would let the handshake begin, so a client waits.</text>
+<text class="t-desc" x="620" y="564">When the attacker gives up, held_ms is published as attacker_ensnared.</text>
+<rect class="b-cmp" x="604" y="614" width="508" height="136" rx="10"/>
+<text class="t-code" x="620" y="642">check_in_warden</text>
+<text class="t-type" x="620" y="660">[gen_server, the heartbeat]</text>
+<text class="t-desc" x="620" y="684">Publishes warden_checked_in every 60 s with tarpit (1/0), interval_s and</text>
+<text class="t-desc" x="620" y="700">at_ms, so a consumer builds its roster live and never guesses the</text>
+<text class="t-desc" x="620" y="716">freshness window. A failed check-in is not fatal: the next interval tries</text>
+<text class="t-desc" x="620" y="732">again.</text>
+<path class="edge" d="M200 190V222" marker-end="url(#a)"/>
+<text class="t-rel" x="208" y="214">boots with</text>
+<path class="edge" d="M200 358V390" marker-end="url(#a)"/>
+<text class="t-rel" x="208" y="382">start/1 starts</text>
+<path class="edge" d="M572 450H588" marker-end="url(#a)"/>
+<text class="t-rel" x="596" y="450">starts them</text>
+<path class="edge" d="M588 600H572" marker-end="url(#a)"/>
+<text class="t-rel" x="596" y="600">each surface publishes through</text>
+<path class="edge" d="M858 430V462" marker-end="url(#a)"/>
+<text class="t-rel" x="866" y="454">spawns one per connection</text>
+<rect class="b-mac" x="32" y="822" width="540" height="136" rx="10"/>
+<text class="t-code" x="48" y="850">mcl_om</text>
+<text class="t-type" x="48" y="868">[library, ~&gt; 1.4]</text>
+<text class="t-desc" x="48" y="892">boot/1: loads the node identity key, joins the realm, dials the pinned</text>
+<text class="t-desc" x="48" y="908">stations over QUIC, serves /health on a Unix socket at</text>
+<text class="t-desc" x="48" y="924">/run/mcl/health.sock, and starts the service. Nothing is advertised.</text>
+<rect class="b-mac" x="588" y="822" width="540" height="136" rx="10"/>
+<text class="t-code" x="604" y="850">macula</text>
+<text class="t-type" x="604" y="868">[library, ~&gt; 16.0, wire 1.0]</text>
+<text class="t-desc" x="604" y="892">QUIC transport, the publish path mcl_warden_facts calls, and the signed</text>
+<text class="t-desc" x="604" y="908">records the mesh DHT holds. Every fact carries the node identity its link</text>
+<text class="t-desc" x="604" y="924">verified, which is how a consumer attributes and allowlists this warden.</text>
+<rect class="b-ext" x="40" y="990" width="1080" height="120" rx="10"/>
+<text class="t-code" x="56" y="1018">The host</text>
+<text class="t-type" x="56" y="1036">[environment and mounts; both are in the compose file]</text>
+<text class="t-desc" x="56" y="1060">MCL_WARDEN_AUTH_LOG (the mounted host log), MCL_WARDEN_TARPIT_PORTS, MCL_WARDEN_MAX_CONNS, MCL_WARDEN_TENANT_ID,</text>
+<text class="t-desc" x="56" y="1076">MCL_BOX, MCL_WARDEN_LAT_E6, MCL_WARDEN_LNG_E6, and the realm and station variables. The identity key is</text>
+<text class="t-desc" x="56" y="1092">/etc/mcl/secrets/identity.key in the mcl-warden-secrets volume; the host's log directory is read-only at /host/log.</text>
+<path class="edge" d="M300 790V822" marker-end="url(#a)"/>
+<text class="t-rel" x="308" y="812">calls boot/1</text>
+<path class="edge" d="M450 678V800H858V822" marker-end="url(#a)"/>
+<text class="t-rel" x="458" y="730">publishes on the mesh</text>
+<text class="t-desc" x="40" y="1150">config/sys.config.src fixes the org, mcl-warden, which the fact topics carry, and the realm name; the service refuses to start</text>
+<text class="t-desc" x="40" y="1168">unless sha256 of that name is MCL_REALM. The log is mounted as a DIRECTORY, because a file bind-mount pins the inode and goes blind at the first logrotate.</text>
+<rect class="b-sys" x="24" y="1206" width="22" height="14" rx="3"/>
+<text class="t-leg" x="54" y="1218">In scope</text>
+<rect class="b-per" x="110.8" y="1206" width="22" height="14" rx="3"/>
+<text class="t-leg" x="140.8" y="1218">Person</text>
+<rect class="b-mac" x="184.39999999999998" y="1206" width="22" height="14" rx="3"/>
+<text class="t-leg" x="214.39999999999998" y="1218">Macula infrastructure</text>
+<rect class="b-ext" x="357.0" y="1206" width="22" height="14" rx="3"/>
+<text class="t-leg" x="387.0" y="1218">External system</text>
+<rect class="b-cmp" x="490.0" y="1206" width="22" height="14" rx="3"/>
+<text class="t-leg" x="520.0" y="1218">Container or component</text>
+<rect class="bound" x="669.2" y="1206" width="22" height="14" rx="3"/>
+<text class="t-leg" x="699.2" y="1218">Boundary</text>
+</svg>
