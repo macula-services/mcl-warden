@@ -3,7 +3,7 @@
 *This exists so a reader can see what mcl-warden talks to, and what it is made
 of, without reading it.*
 
-**Status: three published facts, no procedures, no store.** The service tails the
+**Status: three published facts, no procedures of its own, no store.** The service tails the
 host's auth log, holds attackers on decoy ports when the tarpit is switched on,
 and check-ins every 60 s. `capabilities/0` is empty and no reckon-db is opened:
 the facts are the whole output.
@@ -14,7 +14,7 @@ the facts are the whole output.
 
 | Element | Kind | Role |
 | --- | --- | --- |
-| mcl-warden | In scope | Reads the host's auth log, holds attackers on decoy ports, and publishes what it sees on three facts. One OTP release in one container, an `mcl_om` mesh service on its own box. It never blocks, offers no procedure and holds no store |
+| mcl-warden | In scope | Reads the host's auth log, holds attackers on decoy ports, and publishes what it sees on three facts. One OTP release in one container, an `mcl_om` mesh service on its own box. It never blocks, offers no procedure of its own and holds no store |
 | An attacker | External system | Fails logins on the box's real sshd, and probes whatever else is open, including the decoy ports when the tarpit is on |
 | Service operator | Person | Runs the box, sets the realm and the box label, opens the decoy ports in the firewall, and lists the warden's node id where a sentinel reads it |
 | A sentinel, or any consumer | External system | Subscribes to the three watch facts and builds its roster from the check-ins; attributes each fact by the verified publisher, never by the payload |

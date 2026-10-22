@@ -73,7 +73,7 @@
 <text class="t-desc" x="406" y="316">attackers on decoy ports, and</text>
 <text class="t-desc" x="406" y="332">publishes what it sees on three</text>
 <text class="t-desc" x="406" y="348">facts. Holds no store, offers no</text>
-<text class="t-desc" x="406" y="364">procedure, never blocks.</text>
+<text class="t-desc" x="406" y="364">procedure of its own, never blocks.</text>
 <rect class="b-ext" x="40" y="470" width="320" height="136" rx="10"/>
 <text class="t-name" x="56" y="498">The box's sshd and auth log</text>
 <text class="t-type" x="56" y="516">[External system]</text>
