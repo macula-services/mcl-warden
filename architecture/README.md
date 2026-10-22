@@ -48,6 +48,8 @@ and the realm name; the service refuses to start unless
 file: a file bind-mount pins the inode, and the sensor goes blind while the
 container still looks healthy.
 
+**Where the station list comes from.** It is not in `config/sys.config.src`: `mcl_om` reads `MACULA_STATION_SEEDS` and `MACULA_STATION_NODE_IDS` from the environment at boot, paired index for index, so this repository pins no station and the list may be any length.
+
 `tenant_id` and `label` are self-asserted display attribution. Who sent a fact is
 the node identity the publisher's link verified, which is the id the warden logs
 at start and the one to put in a sentinel's warden list.
@@ -68,5 +70,5 @@ classes plus a `prefers-color-scheme` dark block, never CSS custom properties,
 which `rsvg-convert` renders black.
 
 The check that keeps them here is the `c4-model` job in
-`.github/workflows/build-push.yml`. It is red until both files exist and are
+`.github/workflows/c4-model.yml`. It is red until both files exist and are
 shown, and it stays red if either one goes missing.
