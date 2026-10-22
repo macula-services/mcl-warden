@@ -143,7 +143,7 @@ def context():
     d.box("b-sys", 390, 230, 320, 152, "mcl-warden", "[mcl_om mesh service, own box]",
           ["Reads the host's auth log, holds", "attackers on decoy ports, and",
            "publishes what it sees on three", "facts. Holds no store, offers no",
-           "procedure, never blocks."])
+           "procedure of its own, never blocks."])
     d.box("b-ext", 40, 470, 320, 136, "The box's sshd and auth log", "[External system]",
           ["sshd writes every failed login to", "its auth log; the directory is",
            "mounted read-only at /host/log.", "The sensor tails it by inode."])
