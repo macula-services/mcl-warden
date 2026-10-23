@@ -33,8 +33,9 @@ Released as 0.2.0 on macula 14.2 through `mcl_om` 0.38. It replaces
 the macula 10 warden service and inherits nothing from it: no identity, no
 volume, no topic.
 
-0.3.0 moves it to wire 1.0: macula 15.6 through `mcl_om` 1.0. It reaches a box
-on the flag day (macula-io/macula-fleet#27), when the whole fleet moves together.
+0.3.0 moves it to wire 1.0: macula 15.6 through `mcl_om` 1.0. The flag day
+(macula-io/macula-fleet#27) is past: `edge/gitops/release-targets` pins this image
+0.3.0 on twelve boxes, canary first and the rest after it.
 
 ## What it does
 
@@ -97,9 +98,11 @@ Rules a consumer can rely on:
 - A change to any of this is a new `_v2` topic, not an edit. The contract is
   pinned in `apps/mcl_warden/test/mcl_warden_facts_tests.erl`.
 
-Like every mcl service, it also answers `mcl-warden/info`, which mcl_om adds: its
-name, version and description, its org and claim labels, node id, the macula
-and mcl_om versions, uptime, the health word and the procedures it advertises.
+Like every mcl service, it also answers the open procedures mcl_om adds:
+`mcl-warden/info` gives its name, version and description, its org and claim
+labels, node id, the macula and mcl_om versions, uptime, the health word and the
+procedures it advertises; `mcl-warden/get_limits` gives the inbound guard's
+limits and current-window stats.
 Open to any mesh caller, public facts only.
 
 ## Configuration
@@ -114,7 +117,7 @@ Open to any mesh caller, public facts only.
 | `MCL_WARDEN_TENANT_ID` | unset | who runs this warden, shown on every fact |
 | `MCL_SERVICE_NAME` | `mcl-warden` | label on the boot claim the realm's operator sees on the Providers desk |
 | `MCL_BOX` | unset | which box: on the boot claim, and on every fact as the warden's label |
-| `MCL_WARDEN_LAT_E6` / `MCL_WARDEN_LNG_E6` | unset | declared map position, integer micro-degrees (Helsinki `60170000` / `24940000`). Self-asserted |
+| `MCL_WARDEN_LAT_E6` / `MCL_WARDEN_LNG_E6` | unset | declared map position, integer micro-degrees (for example `60170000` / `24940000`). Self-asserted |
 | `MCL_WARDEN_TARPIT_PORTS` | `[]` | decoy ports as an Erlang list, e.g. `[2222,2323]`. `[]` opens nothing |
 | `MCL_WARDEN_MAX_CONNS` | `65536` | most tarpit connections held at once |
 | `MCL_WARDEN_AUTH_LOG` | `/host/log/auth.log` | the log inside the container. RHEL family: `/host/log/secure` |
@@ -185,7 +188,7 @@ runs in the same build image. macula's NIFs build from source there.
 
 A `v*` tag publishes `ghcr.io/macula-services/mcl-warden:<version>` and nothing else, signed
 by digest with its SBOM and provenance (macula-ci-images' `attest-image.yml`). A push to
-`main` publishes `:main` and `:<sha>`, which nothing follows, and nothing moves `:latest`.
+`main` publishes `:main` and `:<sha>`, which no box follows. Nothing moves `:latest` at all.
 The fleet runs a release by digest: macula-fleet's pin-releases workflow finds the signed
 release, verifies it was signed on its tag and pins `<version>@sha256:<digest>`
 (macula-fleet#14, #15), so a green `v*` tag is the deploy. To roll back, revert the pin and

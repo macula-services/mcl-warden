@@ -55,9 +55,10 @@ info_version_matches_the_application_test() ->
     #{version := Reported} = ?SERVICE:info(),
     ?assertEqual(list_to_binary(Vsn), Reported).
 
-%% The warden serves nothing callable: its whole output is the three facts in
-%% mcl_warden_facts. Adding a capability breaks this test on purpose, so that
-%% someone writes down what the warden can now be asked to do.
+%% capabilities/0 is empty: the warden's output is the three facts in
+%% mcl_warden_facts, and mcl_om adds the open info and get_limits to every
+%% service. Adding one of its own breaks this test on purpose, so that someone
+%% writes down what the warden can now be asked to do.
 announces_no_capability_test() ->
     ?assertEqual([], ?SERVICE:capabilities()).
 
