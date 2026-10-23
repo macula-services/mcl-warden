@@ -220,7 +220,7 @@ def components():
            "again."], code=True)
 
     d.edge("M200 190V222"); d.text("t-rel", 208, 214, "boots with")
-    d.edge("M200 358V390"); d.text("t-rel", 208, 382, "start/1 starts")
+    d.edge("M200 358V390"); d.text("t-rel", 208, 388, "start/1 starts")
     d.edge("M572 450H588"); d.text("t-rel", 596, 450, "starts them")
     d.edge("M588 600H572"); d.text("t-rel", 596, 600, "each surface publishes through")
     d.edge("M858 430V462"); d.text("t-rel", 866, 454, "spawns one per connection")
@@ -242,9 +242,9 @@ def components():
            "/etc/mcl/secrets/identity.key in the mcl-warden-secrets volume; the host's log directory is read-only at /host/log."],
           code=True)
     # From the application box itself, down the free corridor between the two columns, into mcl_om.
-    d.edge("M300 190V205H580V812H560V822"); d.text("t-rel", 468, 810, "calls boot/1")
+    d.edge("M300 190V198H24V900H32"); d.text("t-rel", 36, 808, "calls boot/1")
     # The facts publish through mcl_om's pubsub, so the edge ends at mcl_om, not at macula.
-    d.edge("M450 678V800H300V822"); d.text("t-rel", 336, 786, "publishes through mcl_om")
+    d.edge("M450 678V800H300V822"); d.text("t-rel", 456, 786, "publishes through mcl_om")
     d.text("t-desc", 40, 1150, "config/sys.config.src fixes the org, mcl-warden, which the fact topics carry, and the realm name; the service refuses to start")
     d.text("t-desc", 40, 1168, "unless sha256 of that name is MCL_REALM. The log is mounted as a DIRECTORY, because a file bind-mount pins the inode and goes blind at the first logrotate.")
     d.legend(1206)

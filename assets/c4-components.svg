@@ -107,7 +107,7 @@
 <path class="edge" d="M200 190V222" marker-end="url(#a)"/>
 <text class="t-rel" x="208" y="214">boots with</text>
 <path class="edge" d="M200 358V390" marker-end="url(#a)"/>
-<text class="t-rel" x="208" y="382">start/1 starts</text>
+<text class="t-rel" x="208" y="388">start/1 starts</text>
 <path class="edge" d="M572 450H588" marker-end="url(#a)"/>
 <text class="t-rel" x="596" y="450">starts them</text>
 <path class="edge" d="M588 600H572" marker-end="url(#a)"/>
@@ -134,10 +134,10 @@
 <text class="t-desc" x="56" y="1060">MCL_WARDEN_AUTH_LOG (the mounted host log), MCL_WARDEN_TARPIT_PORTS, MCL_WARDEN_MAX_CONNS, MCL_WARDEN_TENANT_ID,</text>
 <text class="t-desc" x="56" y="1076">MCL_BOX, MCL_WARDEN_LAT_E6, MCL_WARDEN_LNG_E6, and the realm and station variables. The identity key is</text>
 <text class="t-desc" x="56" y="1092">/etc/mcl/secrets/identity.key in the mcl-warden-secrets volume; the host's log directory is read-only at /host/log.</text>
-<path class="edge" d="M300 190V205H580V812H560V822" marker-end="url(#a)"/>
-<text class="t-rel" x="468" y="810">calls boot/1</text>
+<path class="edge" d="M300 190V198H24V900H32" marker-end="url(#a)"/>
+<text class="t-rel" x="36" y="808">calls boot/1</text>
 <path class="edge" d="M450 678V800H300V822" marker-end="url(#a)"/>
-<text class="t-rel" x="336" y="786">publishes through mcl_om</text>
+<text class="t-rel" x="456" y="786">publishes through mcl_om</text>
 <text class="t-desc" x="40" y="1150">config/sys.config.src fixes the org, mcl-warden, which the fact topics carry, and the realm name; the service refuses to start</text>
 <text class="t-desc" x="40" y="1168">unless sha256 of that name is MCL_REALM. The log is mounted as a DIRECTORY, because a file bind-mount pins the inode and goes blind at the first logrotate.</text>
 <rect class="b-sys" x="24" y="1206" width="22" height="14" rx="3"/>

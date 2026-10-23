@@ -20,7 +20,7 @@ every service, so those are the procedures carrying its name.
 | Service operator | Person | Runs the box, sets the realm and the box label, opens the decoy ports in the firewall, and lists the warden's node id where a sentinel reads it |
 | A sentinel, or any consumer | External system | Subscribes to the three watch facts and builds its roster from the check-ins; attributes each fact by the verified publisher, never by the payload |
 | The box's sshd and auth log | External system | sshd writes every failed login to its auth log; the directory is mounted read-only at `/host/log`, and the sensor follows it across rotation by inode |
-| macula-realm | Macula infrastructure | Endorses the node's identity key, admits the boot claim, and grants a a provider authorization per org procedure: the open `info` and `get_limits` `mcl_om` adds to every service. Without that grant `/health` reads degraded |
+| macula-realm | Macula infrastructure | Endorses the node's identity key, admits the boot claim, and grants a provider authorization per org procedure: the open `info` and `get_limits` `mcl_om` adds to every service. Without that grant `/health` reads degraded |
 | Macula stations, mesh DHT | Macula infrastructure | The pinned seeds in `MACULA_STATION_SEEDS` carry every fact over QUIC; the DHT holds an advertisement per org procedure |
 
 The warden never touches sshd, never blocks an address and never stores the log.
