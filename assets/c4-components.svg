@@ -116,7 +116,7 @@
 <text class="t-rel" x="866" y="454">spawns one per connection</text>
 <rect class="b-mac" x="32" y="822" width="540" height="152" rx="10"/>
 <text class="t-code" x="48" y="850">mcl_om</text>
-<text class="t-type" x="48" y="868">[library, ~&gt; 1.4]</text>
+<text class="t-type" x="48" y="868">[library, ~&gt; 1.6]</text>
 <text class="t-desc" x="48" y="892">boot/1: loads the node identity key, joins the realm, dials the pinned</text>
 <text class="t-desc" x="48" y="908">stations over QUIC, serves /health on a Unix socket at</text>
 <text class="t-desc" x="48" y="924">/run/mcl/health.sock, and starts the service: it registers the open</text>
@@ -124,7 +124,7 @@
 <text class="t-desc" x="48" y="956">mcl_om_pubsub:publish/3.</text>
 <rect class="b-mac" x="588" y="822" width="540" height="136" rx="10"/>
 <text class="t-code" x="604" y="850">macula</text>
-<text class="t-type" x="604" y="868">[library, ~&gt; 16.0, wire 1.0]</text>
+<text class="t-type" x="604" y="868">[library, ~&gt; 18.0, wire 1.0]</text>
 <text class="t-desc" x="604" y="892">QUIC transport and the signed records the mesh DHT holds. Every fact</text>
 <text class="t-desc" x="604" y="908">carries the node identity its link verified, which is how a consumer</text>
 <text class="t-desc" x="604" y="924">attributes and allowlists this warden.</text>

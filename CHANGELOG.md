@@ -1,16 +1,30 @@
 # Changelog
 
-## Unreleased
+## 0.4.0 - 2026-10-30
 
-- **macula is declared, at 16** (macula-codebase-checks#4, #14). The
+- **The base library is macula 18, with mcl_om 1.6** (macula-io/macula#147,
+  macula-services/mcl-om#41, mcl-om#42). macula 18 requires a
+  handler-bearing capability to name who may call it and a subscription to
+  name who may deliver to it. Neither applies to this service, and that is a
+  fact about its shape rather than an omission: `capabilities/0` is `[]`,
+  because the warden answers no calls, and it declares no subscriptions,
+  because its whole output is the three facts it publishes — so the boot-time
+  subscription validation has nothing to validate and the caller rule has
+  nothing to ask. What moves is the floor: `mcl_om ~> 1.6`, which declares
+  `macula ~> 18.0`, and `macula ~> 18.0` named directly for the macula modules
+  this service calls and the behaviours it compiles against. Its publishing
+  path is unchanged (`mcl_om_pubsub:publish/3` is still the entry point), so
+  the three facts and their payloads are byte-identical to 0.3.0's and a
+  consumer on the threat commons sees no change. A 0.3.0 deployment changes
+  nothing an operator does: same config, same `/health` keys plus the empty
+  `subscriptions` map every mcl_om 1.6 service now carries.
+
+- **macula is declared directly** (macula-codebase-checks#4, #14). The
   service called macula modules and compiled against `macula_response`
   without declaring the application: it arrived transitively through
   `mcl_om`, so a rebuild took whatever major the newest mcl_om carried.
-  `macula` is now a direct dependency at `~> 16.0` and `mcl_om` is at
-  `~> 1.4`, the release whose own base is macula 16. 16.0 keeps wire 1.0,
-  so this service still speaks to every wire 1.0 box; what it adds is the
-  revocation bound (macula#118). This service gates no overlay and issues
-  no endorsement.
+  `macula` is now a direct dependency, at `~> 18.0` with the release above.
+  This service gates no overlay and issues no endorsement.
 
 ## 0.3.0 - 2026-10-17
 

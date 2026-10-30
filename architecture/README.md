@@ -39,8 +39,8 @@ The warden never touches sshd, never blocks an address and never stores the log.
 | `tarpit_connection` | one held connection | Dribbles a random fake SSH pre-banner line and never sends the line that would start the handshake. When the attacker gives up, `held_ms` is published as `attacker_ensnared` |
 | `check_in_warden` | `gen_server`, the heartbeat | Publishes `warden_checked_in` every 60 s with `tarpit` (1/0), `interval_s` and `at_ms`, so a consumer builds its roster live |
 | `mcl_warden_facts` | the three published facts | Builds and publishes `attacker_sighted_v1`, `attacker_ensnared_v1` and `warden_checked_in_v1` under `<realm>/mcl-warden/warden/watch/`. Values are binaries, integers and lists of binaries: no booleans, no atoms, no floats |
-| `mcl_om` | library, `~> 1.4` | `boot/1`: loads the node identity key, joins the realm, dials the pinned stations over QUIC, serves `/health` on a Unix socket at `/run/mcl/health.sock`, and starts the service, registering the open `info` and `get_limits` every service carries. The facts publish through `mcl_om_pubsub:publish/3` |
-| macula | library, `~> 16.0`, wire 1.0 | QUIC transport, and the signed records the mesh DHT holds. Every fact carries the node identity its link verified |
+| `mcl_om` | library, `~> 1.6` | `boot/1`: loads the node identity key, joins the realm, dials the pinned stations over QUIC, serves `/health` on a Unix socket at `/run/mcl/health.sock`, and starts the service, registering the open `info` and `get_limits` every service carries. The facts publish through `mcl_om_pubsub:publish/3` |
+| macula | library, `~> 18.0`, wire 1.0 | QUIC transport, and the signed records the mesh DHT holds. Every fact carries the node identity its link verified |
 | The host | environment and mounts | `MCL_WARDEN_AUTH_LOG`, `MCL_WARDEN_TARPIT_PORTS`, `MCL_WARDEN_MAX_CONNS`, `MCL_WARDEN_TENANT_ID`, `MCL_BOX`, the declared coordinates, and the realm and station variables. The identity key is a named volume at `/etc/mcl/secrets`; the host's log directory is read-only at `/host/log` |
 
 `config/sys.config.src` fixes the org, `mcl-warden`, which the fact topics carry,

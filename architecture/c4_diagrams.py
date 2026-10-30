@@ -225,14 +225,14 @@ def components():
     d.edge("M588 600H572"); d.text("t-rel", 596, 600, "each surface publishes through")
     d.edge("M858 430V462"); d.text("t-rel", 866, 454, "spawns one per connection")
 
-    d.box("b-mac", 32, 822, 540, 152, "mcl_om", "[library, ~> 1.4]",
+    d.box("b-mac", 32, 822, 540, 152, "mcl_om", "[library, ~> 1.6]",
           ["boot/1: loads the node identity key, joins the realm, dials the pinned",
            "stations over QUIC, serves /health on a Unix socket at",
            "/run/mcl/health.sock, and starts the service: it registers the open",
            "info and get_limits every service carries. The facts publish through",
            "mcl_om_pubsub:publish/3."],
           code=True)
-    d.box("b-mac", 588, 822, 540, 136, "macula", "[library, ~> 16.0, wire 1.0]",
+    d.box("b-mac", 588, 822, 540, 136, "macula", "[library, ~> 18.0, wire 1.0]",
           ["QUIC transport and the signed records the mesh DHT holds. Every fact",
            "carries the node identity its link verified, which is how a consumer",
            "attributes and allowlists this warden."], code=True)

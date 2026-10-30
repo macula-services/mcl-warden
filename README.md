@@ -37,6 +37,13 @@ volume, no topic.
 (macula-io/macula-fleet#27) is past: `edge/gitops/release-targets` pins this image
 0.3.0 on twelve boxes, canary first and the rest after it.
 
+0.4.0 moves it to macula 18 through `mcl_om` 1.6, on the same wire 1.0, so a box
+that takes it talks to every wire 1.0 box it talked to before. Nothing an operator
+does changes: same config, same facts, and `/health` gains the empty `subscriptions`
+map every mcl_om 1.6 service carries. The warden runs on every station box, so the
+pin follows the release the way 0.3.0's did — each box takes the signed tag when
+macula-fleet pins it, canary first and the rest after it.
+
 ## What it does
 
 - **Senses.** Tails the host's auth log (mounted read-only) for failed logins on
